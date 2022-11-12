@@ -1,1 +1,1 @@
-# ChatApp
+# MERN_ChatApp
