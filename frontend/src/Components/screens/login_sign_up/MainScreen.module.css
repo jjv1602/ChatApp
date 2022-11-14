@@ -1,0 +1,36 @@
+.main {
+    background-color: #3973df;
+    background-image: linear-gradient(15deg, #3973df 0%, #b48dd0 100%);
+    min-height:100vh;
+    display: flex;
+    background-size: cover;
+}
+.container{
+    margin-top: 2%;
+    background-color: white;
+    position: relative;
+    margin-bottom: 2%;
+}
+.par_img{
+    position: absolute;
+    left: 30%;
+    top:2%;    
+    height: 26vh;
+    display: flex;
+        align-items: center;
+        justify-content: center;
+    
+}
+.logo{
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+}
+
+.authbox{
+    position: absolute;
+    top:35%;
+    width: 100%;
+    left:0;
+    
+}

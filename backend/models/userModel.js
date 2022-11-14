@@ -21,18 +21,23 @@ const userSchema = mongoose.Schema(
   { timestaps: true }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified) {
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
     next();
   }
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+//Decrypting the password
+// it would compare the password
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+  // enteredPassword password entered by user
+  // this.password - password in the database stored with email
+};
 
 const User = mongoose.model("User", userSchema);
 
