@@ -79,7 +79,7 @@ const Signup = () => {
     }
   };
   return (
-    <VStack spacing="10px">
+    <VStack spacing="20px">
       <FormControl id="text" isRequired>
         <FormLabel>Enter Name</FormLabel>
         <Input
@@ -130,6 +130,7 @@ const Signup = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
+      <br></br>
       <Button
         colorScheme="blue"
         width="100%"

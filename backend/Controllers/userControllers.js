@@ -2,11 +2,12 @@ const expressAsyncHandler = require('express-async-handler');
 const asyncHandler = require('express-async-handler')
 const User = require("../models/userModel");
 const generateToken  = require('../util/generateToken');
-
+// Admin Get all details 
+const admin_get_users=asyncHandler(async(req,res)=>{
+  const user_det=await User.find();
+  res.json({user_det});
+})
 const registerUser = asyncHandler(async (req, res) => {
-  console.log("happy");
-  console.log("req.body");
-  console.log(req.body);
     const { name, email, password } = req.body;
     const userExists = await User.findOne({ email });
     // If user exists then show error
@@ -46,8 +47,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    console.log("req.body");
-    console.log(req.body);
     const user = await User.findOne({ email });
    
       // .matchPassword is a function i.e is declared in userModel.js file which would decrypt the password
@@ -94,4 +93,23 @@ const authUser = asyncHandler(async (req, res) => {
     }
   })
 
-module.exports = { registerUser,authUser,updateUserProfile };
+  // /api/user?search=piyush
+//@description     Get or Search all users
+//@route           GET /api/user?search=
+//@access          Public
+const allUsers = asyncHandler(async (req, res) => {
+  // here we are taking search from url 
+  const keyword = req.query.search    // if query then ? loop else : loop 
+    ? {
+        $or: [   // or - means if any one of the condition is true 
+          { name: { $regex: req.query.search, $options: "i" } },  // options:'i' means case sensitive 
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  // except the current user that is sign in display other users so $ne
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
+});
+module.exports = { registerUser,authUser,updateUserProfile,allUsers,admin_get_users };

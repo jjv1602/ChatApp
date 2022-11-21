@@ -1,5 +1,5 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, useToast, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const Login = () => {
@@ -10,6 +10,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    const userInfo=JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo) {
+      navigate("/chat");
+    }
+  }, [navigate, JSON.parse(localStorage.getItem('userInfo'))]);
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
@@ -58,7 +65,7 @@ const Login = () => {
     }
   };
   return (
-    <VStack spacing="10px">
+    <VStack spacing="40px">
     <FormControl id="email" isRequired>
       <FormLabel>Email Address</FormLabel>
       <Input
@@ -84,10 +91,10 @@ const Login = () => {
         </InputRightElement>
       </InputGroup>
     </FormControl>
+    <br></br>
     <Button
       colorScheme="blue"
       width="100%"
-      style={{ marginTop: 15 }}
       onClick={submitHandler}
       isLoading={loading}
     >
