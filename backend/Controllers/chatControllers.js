@@ -34,7 +34,7 @@ const accessChat = asyncHandler(async (req, res) => {
         isGroupChat: false,
         users: [req.user._id, userId],
       };
-  
+      
       try {
         const createdChat = await Chat.create(chatData);
         const FullChat = await Chat.findOne({ _id: createdChat._id }).populate(
@@ -184,4 +184,4 @@ const addToGroup = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports={accessChat,accessChat,createGroupChat,renameGroup ,addToGroup,removeFromGroup };
+module.exports={accessChat,fetchChats,accessChat,createGroupChat,renameGroup ,addToGroup,removeFromGroup };

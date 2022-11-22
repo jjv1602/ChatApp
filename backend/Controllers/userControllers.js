@@ -99,6 +99,7 @@ const authUser = asyncHandler(async (req, res) => {
 //@access          Public
 const allUsers = asyncHandler(async (req, res) => {
   // here we are taking search from url 
+  console.log(req.query.search);
   const keyword = req.query.search    // if query then ? loop else : loop 
     ? {
         $or: [   // or - means if any one of the condition is true 

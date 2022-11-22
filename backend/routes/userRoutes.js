@@ -13,5 +13,5 @@ router.route('/register').post(registerUser);
 router.route('/login').post(authUser);
 
 router.route('/profile').put(updateUserProfile);
-router.route("/getUsers").get(protect, allUsers);
+router.route("/getUser/").get(protect, allUsers);
 module.exports=router;
