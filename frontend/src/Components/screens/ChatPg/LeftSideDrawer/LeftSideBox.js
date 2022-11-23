@@ -5,12 +5,11 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { getSender } from "../../../../config/ChatLogics";
-import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
-import { ChatState } from "../Context/ChatProvider";
-import GrpChatModal from '../../GrpChatModal/GrpChatModal';
+import { ChatState } from "../../../Context/ChatProvider";
+import GrpChatModal from "../../GrpChatModal/GrpChatModal";
 import ChatLoading from '../../../Loading/ChatLoading';
-const LeftSideDrawer = () => {
+const LeftSideBox = () => {
     const [loggedUser, setLoggedUser] = useState();
 
     const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -44,16 +43,18 @@ const LeftSideDrawer = () => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
         // eslint-disable-next-line
-    }, [fetchAgain]);
+    }, []);
 
     return (
         <Box
-            d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+            minH={"100vh"}
+            display="flex"
             flexDir="column"
             alignItems="center"
-            p={3}
+            p={1}
             bg="white"
-            w={{ base: "100%", md: "31%" }}
+            w="25%"
+            h="100%"
             borderRadius="lg"
             borderWidth="1px"
         >
@@ -62,8 +63,9 @@ const LeftSideDrawer = () => {
                 px={3}
                 fontSize={{ base: "28px", md: "30px" }}
                 fontFamily="Work sans"
-                d="flex"
+                display="flex"
                 w="100%"
+                h="100%"
                 justifyContent="space-between"
                 alignItems="center"
             >
@@ -73,7 +75,7 @@ const LeftSideDrawer = () => {
                 <GrpChatModal>
                     {/* between this is children so it is taking button as children */}
                     <Button
-                        d="flex"
+                        display="flex"
                         fontSize={{ base: "17px", md: "10px", lg: "17px" }}
                         rightIcon={<AddIcon />}
                     >
@@ -82,7 +84,7 @@ const LeftSideDrawer = () => {
                 </GrpChatModal>
             </Box>
             <Box
-                d="flex"
+                display="flex"
                 flexDir="column"
                 p={3}
                 bg="#F8F8F8"
@@ -128,4 +130,4 @@ const LeftSideDrawer = () => {
     )
 }
 
-export default LeftSideDrawer
+export default LeftSideBox

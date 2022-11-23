@@ -2,7 +2,7 @@ const {protect}=require('../middlewares/authMiddleware');
 const express=require('express')
 const router = express.Router();
 const {accessChat,fetchChats,createGroupChat,renameGroup,removeFromGroup,addToGroup}=require("../Controllers/chatControllers");
-router.route('/a').post(protect,accessChat);
+router.route('/').post(protect,accessChat);
 router.route("/").get(protect, fetchChats);
 router.route("/group").post(protect, createGroupChat);
 router.route("/rename").put(protect, renameGroup);

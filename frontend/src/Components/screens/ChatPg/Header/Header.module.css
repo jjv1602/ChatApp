@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap');
 .search_btn{
     position: relative;
-    left:-35%;
+    left:-32%;
     border:1px solid #000000;
 }
 .app_name{

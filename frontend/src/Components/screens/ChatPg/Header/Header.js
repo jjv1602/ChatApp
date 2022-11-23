@@ -38,6 +38,7 @@ const Header = () => {
 
 
     const handleSearch = async () => {
+
         if (!search) {
             toast({
                 title: "Please Enter something in search",
@@ -75,7 +76,7 @@ const Header = () => {
 
 
     const accessChat = async (userId) => {
-        console.log(userId);
+
 
         try {
             setLoadingChat(true);
@@ -110,23 +111,23 @@ const Header = () => {
             h="80px"
             bg="#ffffff"
             borderWidth="5px"
-            p="5px 10px 5px 10px"
+            p="2px 10px 5px 10px"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
         >
 
-            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "80%", width: "5%", borderRadius: "50%", marginLeft: "1%" }}></Image>
+            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "100%", width: "5%", borderRadius: "50%" }}></Image>
             <Tooltip label="Click to Search User" >
-                <Button w={250} variant="ghost" onClick={onOpen} className={style.search_btn} >
+                <Button w={350} variant="ghost" onClick={onOpen} className={style.search_btn} >
                     <i className="fas fa-search"></i>
                     <Text d={{ base: "none", md: "flex" }} px={4}>
                         Search User
                     </Text>
                 </Button>
-        </Tooltip>
-            
-            {/* Search Side Drawer */ }
+            </Tooltip>
+
+            {/* Search Side Drawer */}
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -137,22 +138,22 @@ const Header = () => {
                 <DrawerContent>
                     <DrawerCloseButton />
                     <DrawerHeader>Search Users </DrawerHeader>
-                    <DrawerBody display="flex" flexDirection="column">
-                        <Box d="flex" pb={2}>
+                    <DrawerBody>
+                        <Box pb={2}>
                             <Input placeholder='Search User here...'
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                             <Button colorScheme='blue' onClick={handleSearch} w='140px' ml="50%" mt={3} p={1}>Search </Button>
                         </Box>
-                       
-                {/* if loading then component chatloading which is skeleton chakra */}
+
+                        {/* if loading then component chatloading which is skeleton chakra */}
                         {loading ? (<ChatLoading />
                         ) : (
-                            searchResult?.map((user) => (
+                            searchResult?.map((res) => (
                                 <SearchListItem
-                                    key={user._id}
-                                    user={user}
-                                    handleFunction={() => accessChat(user._id)}
+                                    key={res._id}
+                                    user={res}
+                                    handleFunction={() => accessChat(res._id)}
                                 />
                             ))
                         )}
@@ -164,40 +165,35 @@ const Header = () => {
             <Text fontSize="5xl" className={style.app_name}>
                 Splice Chat
             </Text>
-            <div>
-                <Menu>
-                    <MenuButton p={1}>
-                        <NotificationBadge count={notification.length} effect={Effect.SCALE} />
-                        <BellIcon fontSize="4xl" m={1} />
-                    </MenuButton>
-                    <MenuList>
-                        {/* <MenuItem>Download</MenuItem>
+
+            <Menu>
+                <MenuButton p={1}>
+                    <NotificationBadge count={notification.length} effect={Effect.SCALE} />
+                    <BellIcon fontSize="4xl" m={1} />
+                </MenuButton>
+                <MenuList>
+                    {/* <MenuItem>Download</MenuItem>
                 <MenuItem>Create a Copy</MenuItem>
                 <MenuItem>Mark as Draft</MenuItem>
                 <MenuItem>Delete</MenuItem>
                 <MenuItem>Attend a Workshop</MenuItem> */}
-                    </MenuList>
-                </Menu>
-                <Menu>
-                    <MenuButton p={4} m={1} as={Button} rightIcon={<ChevronDownIcon />}>
-                        <Avatar
-                            size="sm"
-                            cursor="pointer"
-                            // name={user.name}
-                            src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-                        />
-                    </MenuButton>
-                    <MenuList p={2}>
-                        {/* <ProfileModal user={user}> */}
-                        <ProfileModal >
-                            <MenuItem>My Profile</MenuItem>{" "}
-                        </ProfileModal>
-                        <MenuItem onClick={logout}>Logout</MenuItem>
-                    </MenuList>
-                </Menu>
-
-            </div>
-
+                </MenuList>
+            </Menu>
+            <Menu>
+                <MenuButton p={4} m={1} as={Button} rightIcon={<ChevronDownIcon />}>
+                    <Avatar
+                        size="sm"
+                        cursor="pointer"
+                        src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+                    />
+                </MenuButton>
+                <MenuList p={2}>
+                    <ProfileModal user={user}>
+                        <MenuItem>My Profile</MenuItem>{" "}
+                    </ProfileModal>
+                    <MenuItem onClick={logout}>Logout</MenuItem>
+                </MenuList>
+            </Menu>
         </Box >
     )
 }

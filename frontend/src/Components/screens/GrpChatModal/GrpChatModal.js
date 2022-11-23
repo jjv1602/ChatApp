@@ -11,9 +11,14 @@ import {
     useDisclosure,
     useToast,
     Button,
+    FormControl,
+    Input,
+    Box,
   } from '@chakra-ui/react'
-  import UserBadgeItem from "../userAvatar/UserBadgeItem";
-import UserListItem from "../userAvatar/UserListItem";
+  // import UserBadgeItem from "../userAvatar/UserBadgeItem";
+
+import { ChatState } from '../../Context/ChatProvider';
+import SearchListItem from '../ChatPg/SearchListItem/SearchListItem';
   const GrpChatModal = ({children}) => {
       // here children is the button 
       const { isOpen, onOpen, onClose } = useDisclosure();
@@ -129,13 +134,13 @@ import UserListItem from "../userAvatar/UserListItem";
                     <ModalHeader
                         fontSize="35px"
                         fontFamily="Work sans"
-                        d="flex"
+                        display="flex"
                         justifyContent="center"
                     >
                         Create Group Chat
                     </ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody d="flex" flexDir="column" alignItems="center">
+                    <ModalBody display="flex" flexDir="column" alignItems="center">
                         <FormControl>
                             <Input
                                 placeholder="Chat Name"
@@ -150,14 +155,14 @@ import UserListItem from "../userAvatar/UserListItem";
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </FormControl>
-                        <Box w="100%" d="flex" flexWrap="wrap">
-                            {selectedUsers.map((u) => (
-                                <UserBadgeItem
-                                    key={u._id}
-                                    user={u}
-                                    handleFunction={() => handleDelete(u)}
-                                />
-                            ))}
+                        <Box w="100%" display="flex" flexWrap="wrap">
+                            {/* {selectedUsers.map((u) => (
+                                // <UserBadgeItem
+                                //     key={u._id}
+                                //     user={u}
+                                //     handleFunction={() => handleDelete(u)}
+                                // />
+                            ))} */}
                         </Box>
                         {loading ? (
                             // <ChatLoading />
@@ -166,7 +171,7 @@ import UserListItem from "../userAvatar/UserListItem";
                             searchResult
                                 ?.slice(0, 4)
                                 .map((user) => (
-                                    <UserListItem
+                                    <SearchListItem
                                         key={user._id}
                                         user={user}
                                         handleFunction={() => handleGroup(user)}

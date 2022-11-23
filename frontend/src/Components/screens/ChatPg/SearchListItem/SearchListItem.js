@@ -2,8 +2,8 @@ import React from 'react'
 import { Box, Text } from "@chakra-ui/layout";
 import { ChatState } from "../../../Context/ChatProvider";
 import { Avatar } from '@chakra-ui/react';
-const SearchListItem = ({ handleFunction }) => {
-    const { user } = ChatState();
+const SearchListItem = ({user, handleFunction }) => {
+    
 
     return (
         <Box
@@ -15,7 +15,7 @@ const SearchListItem = ({ handleFunction }) => {
                 color: "white",
             }}
             w="100%"
-            d="flex"
+            display="flex"
             alignItems="center"
             color="black"
             px={3}

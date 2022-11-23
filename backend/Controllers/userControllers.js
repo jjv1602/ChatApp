@@ -111,6 +111,7 @@ const allUsers = asyncHandler(async (req, res) => {
 
   // except the current user that is sign in display other users so $ne
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  console.log(users);
   res.send(users);
 });
 module.exports = { registerUser,authUser,updateUserProfile,allUsers,admin_get_users };
