@@ -47,14 +47,13 @@ const LeftSideBox = () => {
 
     return (
         <Box
-            minH={"100vh"}
             display="flex"
             flexDir="column"
-            alignItems="center"
+            justifyContent="space-between"
             p={1}
             bg="white"
-            w="25%"
-            h="100%"
+            w="30%"
+            minh={"40vh"}
             borderRadius="lg"
             borderWidth="1px"
         >
@@ -65,7 +64,6 @@ const LeftSideBox = () => {
                 fontFamily="Work sans"
                 display="flex"
                 w="100%"
-                h="100%"
                 justifyContent="space-between"
                 alignItems="center"
             >
@@ -94,7 +92,22 @@ const LeftSideBox = () => {
                 overflowY="hidden"
             >
                 {chats ? (
-                    <Stack overflowY="scroll">
+                    <Stack overflowY="scroll"
+                    css={{
+                        '&::-webkit-scrollbar': {
+                          width: '9px',
+                         
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            background: "ffffff",
+  
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            height:"1px",
+                            background: "#000000",
+                        },
+                      }}
+                    >
                         {chats.map((chat) => (
                             <Box
                                 onClick={() => setSelectedChat(chat)}

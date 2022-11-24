@@ -108,24 +108,23 @@ const Header = () => {
     return (
         <Box
             w="100%"
-            h="80px"
+            h="12vh"
             bg="#ffffff"
             borderWidth="5px"
             p="2px 10px 5px 10px"
             display="flex"
-            justifyContent="space-between"
             alignItems="center"
         >
 
             <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "100%", width: "5%", borderRadius: "50%" }}></Image>
-            <Tooltip label="Click to Search User" >
-                <Button w={350} variant="ghost" onClick={onOpen} className={style.search_btn} >
-                    <i className="fas fa-search"></i>
-                    <Text d={{ base: "none", md: "flex" }} px={4}>
-                        Search User
-                    </Text>
-                </Button>
-            </Tooltip>
+
+            <Button w={350} variant="ghost" onClick={onOpen} className={style.search_btn} >
+                <i className="fas fa-search"></i>
+                <Text px={4}>
+                    Search User
+                </Text>
+            </Button>
+
 
             {/* Search Side Drawer */}
             <Drawer
@@ -165,7 +164,7 @@ const Header = () => {
             <Text fontSize="5xl" className={style.app_name}>
                 Splice Chat
             </Text>
-
+            <div className={style.menu}>
             <Menu>
                 <MenuButton p={1}>
                     <NotificationBadge count={notification.length} effect={Effect.SCALE} />
@@ -194,6 +193,7 @@ const Header = () => {
                     <MenuItem onClick={logout}>Logout</MenuItem>
                 </MenuList>
             </Menu>
+            </div>
         </Box >
     )
 }
