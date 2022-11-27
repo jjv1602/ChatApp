@@ -5,14 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import LeftSideBox from './LeftSideBox/LeftSideBox';
 import { Box } from '@chakra-ui/react';
 import RightSideBox from './RightSideBox/RightSideBox';
+import { ChatState } from '../../Context/ChatProvider';
 // import { useNavigate } from 'react-router-dom';
 const ChatPg = () => {
+  const {user}=ChatState();
   return (
     <div className={style.main}>
       <Header></Header>
       <Box display="flex" p={"2px"}  w="100%" h={"88vh"}>
-        <LeftSideBox ></LeftSideBox>
-        <RightSideBox></RightSideBox>
+        {user&&<LeftSideBox ></LeftSideBox>}
+        {user&&<RightSideBox></RightSideBox>}
       </Box>
 
     </div>
