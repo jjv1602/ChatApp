@@ -7,12 +7,13 @@ const RightSideBox = ({ fetchAgain, setFetchAgain }) => {
 
   return (
     <Box
-      d={{ base: selectedChat ? "flex" : "none", md: "flex" }}
+      display={{ base: selectedChat ? "flex" : "none", md: "flex" }}
       alignItems="center"
       flexDir="column"
-      p={3}
+      pl={1}
+      pr={1}
       bg="white"
-      w={{ base: "80%", md: "80%" }}
+      w={{ md: "80%" ,base:"100%"}}
       borderRadius="lg"
       borderWidth="1px"
     >

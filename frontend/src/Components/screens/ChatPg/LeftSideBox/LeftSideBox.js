@@ -47,13 +47,13 @@ const LeftSideBox = () => {
 
     return (
         <Box
-            display="flex"
+            display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
             flexDir="column"
+            alignItems="center"
             justifyContent="space-between"
             p={1}
             bg="white"
-            w="30%"
-            minh={"40vh"}
+            w={{ base: "100%",sm:"100%", md: "40%" }}
             borderRadius="lg"
             borderWidth="1px"
         >
@@ -93,20 +93,20 @@ const LeftSideBox = () => {
             >
                 {chats ? (
                     <Stack overflowY="scroll"
-                    css={{
-                        '&::-webkit-scrollbar': {
-                          width: '9px',
-                         
-                        },
-                        '&::-webkit-scrollbar-track': {
-                            background: "ffffff",
-  
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            height:"1px",
-                            background: "#000000",
-                        },
-                      }}
+                        css={{
+                            '&::-webkit-scrollbar': {
+                                width: '9px',
+
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                background: "ffffff",
+
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                height: "1px",
+                                background: "#000000",
+                            },
+                        }}
                     >
                         {chats.map((chat) => (
                             <Box

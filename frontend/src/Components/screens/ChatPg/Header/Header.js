@@ -14,6 +14,7 @@ import { useToast } from "@chakra-ui/toast";
 import ChatLoading from '../../../Loading/ChatLoading';
 import { ChatState } from '../../../Context/ChatProvider';
 import SearchListItem from '../SearchListItem/SearchListItem';
+import { getSender } from "../../../../config/ChatLogics";
 const Header = () => {
     const toast = useToast();
     const btnRef = React.useRef();//for drawer

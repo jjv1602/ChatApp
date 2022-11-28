@@ -29,6 +29,6 @@
     "mongoose": "^6.7.2",
     "nodemon": "^2.0.20",
     "react-router-dom": "^6.4.3",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.5.4"
   }
 }

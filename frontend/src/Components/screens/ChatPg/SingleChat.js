@@ -2,7 +2,7 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 // import "./styles.css";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { Button, IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../../../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -168,8 +168,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             px={2}
             w="100%"
             fontFamily="Work sans"
-            d="flex"
-            justifyContent={{ base: "space-between" }}
+            display="flex"
+            justifyContent={{ base: "space-between", md: "space-between" }}
             alignItems="center"
           >
             <IconButton
@@ -197,13 +197,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ))}
           </Text>
           <Box
-            d="flex"
+            display="flex"
             flexDir="column"
             justifyContent="flex-end"
             p={3}
             bg="#E8E8E8"
             w="100%"
-            h="100%"
+            h="90%"
             borderRadius="lg"
             overflowY="hidden"
           >
@@ -216,7 +216,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div className="messages">
+              <div style={{
+                display: "flex",
+                flexDirection: "column",
+                // overflowY: "scroll",
+                scrollbarWidth: "none",
+              }}>
                 <ScrollableChat messages={messages} />
               </div>
             )}
@@ -225,13 +230,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               onKeyDown={sendMessage}
               id="first-name"
               isRequired
-              mt={3}
             >
               {istyping ? (
                 <div>
                   <Lottie
                     options={defaultOptions}
-                    // height={50}
+                    height={50}
                     width={70}
                     style={{ marginBottom: 15, marginLeft: 0 }}
                   />
@@ -239,19 +243,27 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <></>
               )}
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
-                value={newMessage}
-                onChange={typingHandler}
-              />
+              < div display="flex">
+                <Input
+
+                  variant="filled"
+                  bg="#E0E0E0"
+                  placeholder="Enter a message..  "
+                  value={newMessage}
+                  w={"95%"}
+                  onChange={typingHandler}
+                />
+                <Button colorScheme='teal' w={"5%"} p={2}>
+                <i class="fa-regular fa-paper-plane fa-2x"></i>
+                </Button>
+                
+              </div>
             </FormControl>
           </Box>
         </>
       ) : (
         // to get socket.io on same page
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
+        <Box display="flex" alignItems="center" justifyContent="center" h="100%">
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
           </Text>
