@@ -14,14 +14,17 @@ import {
     Image,
 } from '@chakra-ui/react'
 import React from 'react'
-
+import { FormControl,FormLabel } from '@chakra-ui/react';
+import { Switch } from '@chakra-ui/react'
 const ProfileModal = ({user,children}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <>
         {children ? (
-            <span onClick={onOpen}>{children}</span>
+            <span onClick={onOpen}>
+              
+              {children}</span>
           ) : (
             <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
           )}
@@ -35,6 +38,8 @@ const ProfileModal = ({user,children}) => {
                 justifyContent="center"
               >
                 {user.name}
+
+              
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody

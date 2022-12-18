@@ -130,11 +130,10 @@ const Signup = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <br></br>
       <Button
         colorScheme="blue"
         width="100%"
-        style={{ marginTop: 15 }}
+        size="sm"
         onClick={submitHandler}
         isLoading={loading}
       >

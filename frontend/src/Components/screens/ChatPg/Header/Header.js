@@ -117,52 +117,9 @@ const Header = () => {
             alignItems="center"
         >
 
-            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "100%", width: "5%", borderRadius: "50%" }}></Image>
+            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "80%", width: "5%", borderRadius: "50%" }}></Image>
 
-            <Button w={350} variant="ghost" onClick={onOpen} className={style.search_btn} >
-                <i className="fas fa-search"></i>
-                <Text px={4}>
-                    Search User
-                </Text>
-            </Button>
-
-
-            {/* Search Side Drawer */}
-            <Drawer
-                isOpen={isOpen}
-                placement='left'
-                onClose={onClose}
-                finalFocusRef={btnRef}
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Search Users </DrawerHeader>
-                    <DrawerBody>
-                        <Box pb={2}>
-                            <Input placeholder='Search User here...'
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                            <Button colorScheme='blue' onClick={handleSearch} w='140px' ml="50%" mt={3} p={1}>Search </Button>
-                        </Box>
-
-                        {/* if loading then component chatloading which is skeleton chakra */}
-                        {loading ? (<ChatLoading />
-                        ) : (
-                            searchResult?.map((res) => (
-                                <SearchListItem
-                                    key={res._id}
-                                    user={res}
-                                    handleFunction={() => accessChat(res._id)}
-                                />
-                            ))
-                        )}
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
-
-
-            <Text fontSize="5xl" className={style.app_name}>
+            <Text pl="23vw" fontSize="5xl"  className={style.app_name}>
                 Splice Chat
             </Text>
             <div className={style.menu}>

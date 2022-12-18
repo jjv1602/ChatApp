@@ -6,10 +6,10 @@
     background-size: cover;
 }
 .container{
-    margin-top: 2%;
+    margin-top: 1%;
     background-color: white;
     position: relative;
-    margin-bottom: 2%;
+    margin-bottom: 1vh;
 }
 .par_img{
     position: absolute;

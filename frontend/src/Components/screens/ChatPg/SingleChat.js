@@ -14,9 +14,10 @@ import animationData from "../Assets_Img/typing_animation.json";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "../ChatPg/UpdateGroupChatModal";
 import { ChatState } from "../../Context/ChatProvider";
+import { FormLabel } from '@chakra-ui/react';
+import { Switch } from '@chakra-ui/react'
 const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
-
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -160,6 +161,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   return (
     <>
+
       {selectedChat ? (
         <>
           <Text
@@ -167,23 +169,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             pb={3}
             px={2}
             w="100%"
-            fontFamily="Work sans"
+            fontFamily={"'Fredoka', sans-serif "}
             display="flex"
             justifyContent={{ base: "space-between", md: "space-between" }}
             alignItems="center"
+            backgroundColor='#A4A9B6'
+            color='#000000'
+            bg="#38B2AC"
           >
             <IconButton
               d={{ base: "flex", md: "none" }}
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />
+
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
                   {getSender(user, selectedChat.users)}
+                 
                   <ProfileModal
                     user={getSenderFull(user, selectedChat.users)}
                   />
+
                 </>
               ) : (
                 <>
@@ -201,7 +209,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             flexDir="column"
             justifyContent="flex-end"
             p={3}
-            bg="#E8E8E8"
             w="100%"
             h="90%"
             borderRadius="lg"
@@ -228,6 +235,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
             <FormControl
               onKeyDown={sendMessage}
+              onSubmit={sendMessage}
               id="first-name"
               isRequired
             >
@@ -246,17 +254,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               < div display="flex">
                 <Input
 
-                  variant="filled"
+
                   bg="#E0E0E0"
                   placeholder="Enter a message..  "
                   value={newMessage}
                   w={"95%"}
                   onChange={typingHandler}
                 />
-                <Button colorScheme='teal' w={"5%"} p={2}>
-                <i class="fa-regular fa-paper-plane fa-2x"></i>
+                <Button colorScheme='teal' w={"5%"} p={2} type='submit'>
+                  <i class="fa-regular fa-paper-plane fa-2x" ></i>
                 </Button>
-                
+
               </div>
             </FormControl>
           </Box>
