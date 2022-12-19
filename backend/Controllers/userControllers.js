@@ -66,6 +66,7 @@ const authUser = asyncHandler(async (req, res) => {
 
   const updateUserProfile=expressAsyncHandler(async(req,res)=>{
     const { name, email, pic,password,contact } = req.body;
+    console.log(req.body);
     const user = await User.findOne({ email });
     
     if (user) {

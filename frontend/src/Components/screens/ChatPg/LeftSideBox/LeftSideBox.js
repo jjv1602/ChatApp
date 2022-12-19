@@ -113,6 +113,7 @@ const LeftSideBox = () => {
 
             const { data } = await axios.get("/api/chat", config);
             setChats(data);
+            console.log(data);
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -222,7 +223,8 @@ const LeftSideBox = () => {
                 overflowY="hidden"
                 backgroundColor='#181C34'
             >
-                <Text fontSize='lg' color='#ffffff'>Your Messages</Text>
+                <Text  fontSize='lg'  fontWeight="bold" color='#ffffff' >Your Messages</Text>
+                <br></br>
                 {chats ? (
                     <Stack overflowY="scroll"
                         css={{
@@ -252,7 +254,8 @@ const LeftSideBox = () => {
                                 key={chat._id}
                                 display="flex"
                             >
-                                <Avatar id="av"   size='lg' src='https://bit.ly/dan-abramov' />
+                                
+                               <Avatar id="av"   size='lg' src={chat.users[0].pic} />
                               <Box display="flex" flexDirection="column" pl="4">
                                 <Text id="person" fontSize='2xl' color='#ffffff'   fontWeight="bold">
                                     {!chat.isGroupChat
@@ -262,7 +265,7 @@ const LeftSideBox = () => {
     
                                 {chat.latestMessage && (
                                     <Text fontSize='md' color='#ffffff'>
-                                        <b>{chat.latestMessage.sender.name} : </b>
+                                        <b>{chat.latestMessage.sender.name===user.name? "You" : chat.latestMessage.sender.name} : </b>
                                         {chat.latestMessage.content.length > 50
                                             ? chat.latestMessage.content.substring(0, 51) + "..."
                                             : chat.latestMessage.content}

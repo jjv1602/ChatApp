@@ -44,6 +44,7 @@ const ScrollableChat = ({ messages }) => {
   
                 </>
               }
+              
               {!isfirst_msg_of_Sender(messages, m, i, user._id) &&
             
                   <Box
@@ -64,10 +65,10 @@ const ScrollableChat = ({ messages }) => {
                   </Box>
 
               }
+     
             </div>
           ))}
-      </ScrollableFeed>
-
+    </ScrollableFeed>
     </>
   );
 

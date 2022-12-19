@@ -6,7 +6,7 @@ import { Button, IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../../../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowRightIcon, LinkIcon } from "@chakra-ui/icons";
 import ProfileModal from "../ChatPg/ProfileModal/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
@@ -71,7 +71,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+    if (newMessage) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -187,7 +187,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               (!selectedChat.isGroupChat ? (
                 <>
                   {getSender(user, selectedChat.users)}
-                 
+
                   <ProfileModal
                     user={getSenderFull(user, selectedChat.users)}
                   />
@@ -234,8 +234,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
 
             <FormControl
-              onKeyDown={sendMessage}
-              onSubmit={sendMessage}
               id="first-name"
               isRequired
             >
@@ -251,21 +249,34 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <></>
               )}
-              < div display="flex">
-                <Input
+              <Box display="flex" >
+                {/* <Input
+              // onChange={(e) => postDetails(e.target.files[0])}
+              id="custom-file"
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              label="Upload Profile Picture"
+              custom /> */}
 
-
-                  bg="#E0E0E0"
-                  placeholder="Enter a message..  "
-                  value={newMessage}
-                  w={"95%"}
-                  onChange={typingHandler}
+                <IconButton
+                  bgColor='#C8E1C1'
+                  icon={<LinkIcon />}
                 />
-                <Button colorScheme='teal' w={"5%"} p={2} type='submit'>
-                  <i class="fa-regular fa-paper-plane fa-2x" ></i>
+                <Input
+                  placeholder=" Enter a message..  "
+                  value={newMessage}
+                  w={"90%"}
+                  onChange={typingHandler}
+                  bgColor="#ffffff"
+                />
+                <Button  bgColor='#C8E1C1' w={"5%"} p={2} onClick={sendMessage}>
+                  <IconButton
+                    bgColor='#C8E1C1'
+                    icon={<ArrowRightIcon />}
+                  />
                 </Button>
 
-              </div>
+              </Box>
             </FormControl>
           </Box>
         </>

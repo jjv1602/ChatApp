@@ -42,7 +42,7 @@ const Signup = () => {
     }
 
     try {
-      console.log({name,email,password});
+      // console.log({name,email,password});
       const config = {
         headers: {
           "Content-type": "application/json",
