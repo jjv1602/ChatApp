@@ -12,18 +12,15 @@ const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
 
   return (
+   
     <>
-      <ScrollableFeed>
         {messages &&
           messages.map((m, i) => (
             <div style={{ display: "flex" }} key={m._id}>
               {isfirst_msg_of_Sender(messages, m, i, user._id) &&
                 <>
-                  <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
-                  <Avatar id="av"   size='lg' src='https://bit.ly/dan-abramov' />
-                  </Tooltip>
-                 
-                    
+  
+                  <Avatar id="av"   size='lg' src={m.sender.pic} />
                       <Box className="message-body"
                         style={{
                           backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
@@ -68,7 +65,6 @@ const ScrollableChat = ({ messages }) => {
      
             </div>
           ))}
-    </ScrollableFeed>
     </>
   );
 

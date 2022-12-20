@@ -15,6 +15,14 @@ import ChatLoading from '../../../Loading/ChatLoading';
 import { ChatState } from '../../../Context/ChatProvider';
 import SearchListItem from '../SearchListItem/SearchListItem';
 import { getSender } from "../../../../config/ChatLogics";
+import { Switch } from '@chakra-ui/react'
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+  } from '@chakra-ui/react'
+
 const Header = () => {
     const toast = useToast();
     const btnRef = React.useRef();//for drawer
@@ -119,46 +127,60 @@ const Header = () => {
 
             <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "80%", width: "5%", borderRadius: "50%" }}></Image>
 
-            <Text pl="23vw" fontSize="5xl"  className={style.app_name}>
+            <Text pl="23vw" fontSize="5xl" className={style.app_name}>
                 Splice Chat
             </Text>
             <div className={style.menu}>
-            <Menu>
-                <MenuButton p={1}>
-                    <NotificationBadge count={notification.length} effect={Effect.SCALE} />
-                    <BellIcon fontSize="4xl" m={1} />
-                </MenuButton>
-                <MenuList>
-                {!notification.length && "No New Messages"}
-              {notification.map((notif) => (
-                <MenuItem
-                  key={notif._id}
-                  onClick={() => {
-                    setSelectedChat(notif.chat);
-                    setNotification(notification.filter((n) => n !== notif));
-                  }}
-                >
-                  {notif.chat.isGroupChat
-                    ? `New Message in ${notif.chat.chatName}`
-                    : `New Message from ${getSender(user, notif.chat.users)}`}
-                </MenuItem>))}
-                </MenuList>
-            </Menu>
-            <Menu>
-                <MenuButton p={4} m={1} as={Button} rightIcon={<ChevronDownIcon />}>
-                    <Avatar
-                        size="sm"
-                        cursor="pointer"
-                        src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-                    />
-                </MenuButton>
-                <MenuList p={2}>
-                    <ProfileModal user={user}>
-                        <MenuItem>My Profile</MenuItem>{" "}
-                    </ProfileModal>
-                    <MenuItem onClick={logout}>Logout</MenuItem>
-                </MenuList>
-            </Menu>
+                <Menu >
+                    <MenuButton p={1}>
+                        <NotificationBadge count={notification.length} effect={Effect.SCALE} />
+                        <BellIcon fontSize="4xl" m={1} />
+                    </MenuButton>
+                    <MenuList>
+                        {!notification.length && "No New Messages"}
+                        {notification.map((notif) => (
+                            <MenuItem
+                                key={notif._id}
+                                onClick={() => {
+                                    setSelectedChat(notif.chat);
+                                    setNotification(notification.filter((n) => n !== notif));
+                                }}
+                            >
+                                {notif.chat.isGroupChat
+                                    ? `New Message in ${notif.chat.chatName}`
+                                    : `New Message from ${getSender(user, notif.chat.users)}`}
+                            </MenuItem>))}
+                    </MenuList>
+                </Menu>
+                <Menu >
+                    <MenuButton p={4} m={1} as={Button} rightIcon={<ChevronDownIcon />}>
+                        <Avatar
+                            size="sm"
+                            cursor="pointer"
+                            src={user.pic}
+                        />
+                    </MenuButton>
+                    <MenuList p={2}>
+                        <ProfileModal user={user}>
+                            <MenuItem  fontSize="1.4rem"  fontFamily={"'Fredoka', sans-serif "} >My Profile</MenuItem>{" "}
+                        </ProfileModal>
+                        <MenuItem >
+                        <FormControl display='flex' alignItems='center'>
+                            <FormLabel htmlFor='email-alerts' mb='0'  fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>
+                                Block Good Morning Messages
+                            </FormLabel>
+                            <Switch id='email-alerts' /></FormControl></MenuItem>
+                        <MenuItem >
+                            <FormControl display='flex' alignItems='center'>
+                            <FormLabel   fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "} htmlFor='email-alerts' mb='0'>
+                                Block Abusive Content
+                            </FormLabel>
+                            <Switch id='email-alerts' />
+                            </FormControl>
+                        </MenuItem>
+                        <MenuItem onClick={logout} fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>Logout</MenuItem>
+                    </MenuList>
+                </Menu>
             </div>
         </Box >
     )

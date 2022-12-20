@@ -255,7 +255,7 @@ const LeftSideBox = () => {
                                 display="flex"
                             >
                                 
-                               <Avatar id="av"   size='lg' src={chat.users[0].pic} />
+                               <Avatar id="av"   size='lg' src={chat.users[1].pic} />
                               <Box display="flex" flexDirection="column" pl="4">
                                 <Text id="person" fontSize='2xl' color='#ffffff'   fontWeight="bold">
                                     {!chat.isGroupChat

@@ -223,14 +223,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div style={{
-                display: "flex",
-                flexDirection: "column",
-                // overflowY: "scroll",
-                scrollbarWidth: "none",
-              }}>
+              <Box 
+                display= "flex"
+                flexDirection= "column"
+                overflowY= "scroll"
+                scrollbarWidth= "none"
+                padding="10"
+                css={{
+                  '&::-webkit-scrollbar': {
+                      width: '9px',
+
+                  },
+                  '&::-webkit-scrollbar-track': {
+                      background: "#b9bbf3",
+
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                      height: "1px",
+                      background: "#000000",
+                  },
+              }}
+              >
                 <ScrollableChat messages={messages} />
-              </div>
+              </Box>
             )}
 
             <FormControl

@@ -55,7 +55,7 @@ const Signup = () => {
 
       // console.log(JSON.stringify(data));
       toast({
-        title: "Register Successful",
+        title: "Register Successful Please Login Now",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -63,7 +63,7 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      navigate("/chat");
+      navigate("/");
     } catch (error) {
       console.log("error.response.data.message");
       console.log(error);
