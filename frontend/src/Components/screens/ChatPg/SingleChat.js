@@ -16,6 +16,7 @@ import UpdateGroupChatModal from "../ChatPg/UpdateGroupChatModal";
 import { ChatState } from "../../Context/ChatProvider";
 import { FormLabel } from '@chakra-ui/react';
 import { Switch } from '@chakra-ui/react'
+import './SingleChat.css';
 const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -25,6 +26,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [pic, setPic] = useState();
+  const [picMessage, setPicMessage] = useState();
+  const [previewImg,setpreviewImg]=useState(false);
   const toast = useToast();
 
   const defaultOptions = {
@@ -103,7 +107,30 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   };
+  const postPic = (pics) => {
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "eventmanage");
+      data.append("cloud_name", "dxxu4powb");
+      // console.log(data);
+      fetch("https://api.cloudinary.com/v1_1/dxxu4powb/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log(data);
+          setPic(data.url.toString());
 
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+    } else {
+      return setPicMessage("Please Select an Image");
+    }
+  }
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
@@ -223,60 +250,61 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <Box 
-                display= "flex"
-                flexDirection= "column"
-                overflowY= "scroll"
-                scrollbarWidth= "none"
+              <Box
+                display="flex"
+                flexDirection="column"
+                overflowY="scroll"
+                scrollbarWidth="none"
                 padding="10"
                 css={{
                   '&::-webkit-scrollbar': {
-                      width: '9px',
+                    width: '9px',
 
                   },
                   '&::-webkit-scrollbar-track': {
-                      background: "#b9bbf3",
+                    background: "#b9bbf3",
 
                   },
                   '&::-webkit-scrollbar-thumb': {
-                      height: "1px",
-                      background: "#000000",
+                    height: "1px",
+                    background: "#000000",
                   },
-              }}
+                }}
               >
                 <ScrollableChat messages={messages} />
               </Box>
             )}
 
-            <FormControl
-              id="first-name"
-              isRequired
-            >
-              {istyping ? (
-                <div>
-                  <Lottie
-                    options={defaultOptions}
-                    height={50}
-                    width={70}
-                    style={{ marginBottom: 15, marginLeft: 0 }}
-                  />
-                </div>
-              ) : (
-                <></>
-              )}
-              <Box display="flex" >
-                {/* <Input
-              // onChange={(e) => postDetails(e.target.files[0])}
-              id="custom-file"
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              label="Upload Profile Picture"
-              custom /> */}
-
-                <IconButton
-                  bgColor='#C8E1C1'
-                  icon={<LinkIcon />}
+            {istyping ? (
+              <div>
+                <Lottie
+                  options={defaultOptions}
+                  height={50}
+                  width={70}
+                  style={{ marginBottom: 15, marginLeft: 0 }}
                 />
+              </div>
+            ) : (
+              <></>
+            )}
+            <Box display="flex" alignContent="center" justifyContent="center">
+              <FormControl
+                id="image"
+                w={"5%"}
+              >
+                 <label htmlFor="fileInput">
+                <LinkIcon bgColor='#C8E1C1' w={"100%"} h={"70%"} p={2} borderRadius="4" cursor="pointer"/>
+            </label>
+            <input
+                type='file'
+                id="fileInput"
+                style={{ display: 'none' }}
+                onChange={(e) => postPic(e.target.files[0])}
+                
+            />
+
+              </FormControl>
+              <FormControl>
                 <Input
                   placeholder=" Enter a message..  "
                   value={newMessage}
@@ -284,15 +312,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   onChange={typingHandler}
                   bgColor="#ffffff"
                 />
-                <Button  bgColor='#C8E1C1' w={"5%"} p={2} onClick={sendMessage}>
+
+                <Button bgColor='#C8E1C1' w={"5%"} p={2} onClick={sendMessage}>
                   <IconButton
                     bgColor='#C8E1C1'
                     icon={<ArrowRightIcon />}
                   />
                 </Button>
-
-              </Box>
-            </FormControl>
+              </FormControl>
+            </Box>
           </Box>
         </>
       ) : (
@@ -302,7 +330,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             Click on a user to start chatting
           </Text>
         </Box>
-      )}
+      )
+      }
     </>
   );
 };
