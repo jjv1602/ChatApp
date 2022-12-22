@@ -299,7 +299,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 type='file'
                 id="fileInput"
                 style={{ display: 'none' }}
-                onChange={(e) => postPic(e.target.files[0])}
+                // onChange={(e) => postPic(e.target.files[0])}
                 
             />
 
