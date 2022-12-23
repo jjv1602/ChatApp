@@ -7,7 +7,7 @@
 * Good Morning Images also can be blocked.  For this used Optical Character Recognition (OCR) 
 * Also you can block abusive content.
 * It uses Socket.io for real time communication and stores user details in encrypted format in Mongo DB Database
-* Fake News is also one of the best feature in this app . When we detect a fake message or fake image we add it to our spam list in our database so now everywhere the same message would be send it would have a banner of fake news
+* Fake News is also one of the best feature in this app . When we detect a fake message or fake image we add it to our spam list in our database so now everywhere the same message would be send it would have be flagged for fake news
 
 ## Tech Stack
 
