@@ -1,5 +1,5 @@
 
-## Splice Chat App
+## Splice App
 
 * Splice Chat App  is a Full Stack Chatting App
 
