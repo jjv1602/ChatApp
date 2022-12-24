@@ -63,7 +63,7 @@ const fetchChats = asyncHandler(async (req, res) => {
           select: "name pic email",
         });
         res.status(200).send(results);
-        console.log(results);
+        // console.log(results);
       });
   } catch (error) {
     res.status(400);

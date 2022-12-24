@@ -13,6 +13,7 @@ import Lottie from "react-lottie";
 import animationData from "../Assets_Img/typing_animation.json";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "../ChatPg/UpdateGroupChatModal";
+import PreviewImgScreen from "./PreviewImgScreen";
 import { ChatState } from "../../Context/ChatProvider";
 import { FormLabel } from '@chakra-ui/react';
 import { Switch } from '@chakra-ui/react'
@@ -28,9 +29,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [pic, setPic] = useState();
   const [picMessage, setPicMessage] = useState();
-  const [previewImg,setpreviewImg]=useState(false);
+  const [previewImg, setpreviewImg] = useState(false);
   const toast = useToast();
 
+  const closePreview = () => {
+    setpreviewImg(false);
+  }
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -75,35 +79,73 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (event) => {
-    if (newMessage) {
+    if (newMessage || previewImg) {
+      console.log("hasda");
       socket.emit("stop typing", selectedChat._id);
-      try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-        setNewMessage("");
-        const { data } = await axios.post(
-          "/api/message",
-          {
-            content: newMessage,
-            chatId: selectedChat,
-          },
-          config
-        );
-        socket.emit("new message", data);
-        setMessages([...messages, data]);
-      } catch (error) {
-        toast({
-          title: "Error Occured!",
-          description: "Failed to send the Message",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
+      if(previewImg && pic){
+        try {
+          const config = {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          };
+          setNewMessage("");
+          const { data } = await axios.post(
+            "/api/message",
+            {
+              isImg:true,
+              ImgContent:pic,
+              content:newMessage ? newMessage:"empty",
+              chatId: selectedChat,
+            },
+            config
+          );
+          socket.emit("new message", data);
+          setMessages([...messages, data]);
+        } catch (error) {
+          toast({
+            title: "Error Occured!",
+            description: "Failed to send the Message",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
+        }
+      }
+      else{
+        
+        try {
+          const config = {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          };
+          setNewMessage("");
+          const { data } = await axios.post(
+            "/api/message",
+            {
+              isImg:false,
+              ImgContent:"",
+              content: newMessage,
+              chatId: selectedChat,
+            },
+            config
+          );
+          socket.emit("new message", data);
+          setMessages([...messages, data]);
+        } catch (error) {
+          toast({
+            title: "Error Occured!",
+            description: "Failed to send the Message",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
+        }
       }
     }
   };
@@ -113,16 +155,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       data.append("file", pics);
       data.append("upload_preset", "eventmanage");
       data.append("cloud_name", "dxxu4powb");
-      // console.log(data);
+      console.log("hasdjasjdoa")
       fetch("https://api.cloudinary.com/v1_1/dxxu4powb/image/upload", {
         method: "post",
         body: data,
       })
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data);
+         
+          setpreviewImg(true);
+          
           setPic(data.url.toString());
-
+          
         })
         .catch((err) => {
           // console.log(err);
@@ -250,31 +294,44 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <Box
-                display="flex"
-                flexDirection="column"
-                overflowY="scroll"
-                scrollbarWidth="none"
-                padding="10"
-                css={{
-                  '&::-webkit-scrollbar': {
-                    width: '9px',
+              <>
+                {previewImg ?
+                (  
+              
+                  <PreviewImgScreen pic={pic} previewImg={previewImg} closePreview={closePreview}/>
+                
+                ) :
+                  (
+                    <Box
+                    
+                      display="flex"
+                      flexDirection="column"
+                      overflowY="scroll"
+                      scrollbarWidth="none"
+                      padding="10"
+                      css={{
+                        '&::-webkit-scrollbar': {
+                          width: '9px',
 
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    background: "#b9bbf3",
+                        },
+                        '&::-webkit-scrollbar-track': {
+                          background: "#b9bbf3",
 
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    height: "1px",
-                    background: "#000000",
-                  },
-                }}
-              >
-                <ScrollableChat messages={messages} />
-              </Box>
-            )}
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                          height: "1px",
+                          background: "#000000",
+                        },
+                      }}
+                    >
+                      <ScrollableChat messages={messages} />
+                    </Box>
+                  )
+                }
 
+              </>
+              )
+            }
             {istyping ? (
               <div>
                 <Lottie
@@ -292,16 +349,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 id="image"
                 w={"5%"}
               >
-                 <label htmlFor="fileInput">
-                <LinkIcon bgColor='#C8E1C1' w={"100%"} h={"70%"} p={2} borderRadius="4" cursor="pointer"/>
-            </label>
-            <input
-                type='file'
-                id="fileInput"
-                style={{ display: 'none' }}
-                // onChange={(e) => postPic(e.target.files[0])}
-                
-            />
+                <label htmlFor="fileInput">
+                  <LinkIcon bgColor='#C8E1C1' w={"100%"} h={"70%"} p={2} borderRadius="4" cursor="pointer" visibility={previewImg ? "hidden":"visible"}/>
+                </label>
+                <input
+                  type='file'
+                  id="fileInput"
+                  style={{ display: 'none' }}
+                  onChange={(e) => postPic(e.target.files[0])}
+                  
+                />
 
               </FormControl>
               <FormControl>
@@ -313,7 +370,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   bgColor="#ffffff"
                 />
 
-                <Button bgColor='#C8E1C1' w={"5%"} p={2} onClick={sendMessage}>
+                <Button bgColor='#C8E1C1' w={"5%"} p={2} onClick={sendMessage} >
                   <IconButton
                     bgColor='#C8E1C1'
                     icon={<ArrowRightIcon />}

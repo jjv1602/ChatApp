@@ -22,18 +22,25 @@ const allMessages = asyncHandler(async (req, res) => {
 //@route           POST /api/Message/
 //@access          Protected
 const sendMessage = asyncHandler(async (req, res) => {
-  const { content, chatId } = req.body;
+  
+  const {isImg,ImgContent, content, chatId } = req.body;
 
-  if (!content || !chatId) {
+  if (!chatId) {
     console.log("Invalid data passed into request");
     return res.sendStatus(400);
   }
 
- 
 
   try {
-    let message = await Message.create({ sender: req.user._id, content:content, chat: chatId });
-
+    var message;
+    if(isImg){
+     message = await Message.create({ sender: req.user._id,isImg:true,ImgContent:ImgContent, content:content, chat: chatId });
+     console.log(message);
+    }
+    else{
+      message = await Message.create({ sender: req.user._id,isImg:false,ImgContent:"", content:content, chat: chatId });
+      console.log(message);
+    }
     message = await (
       await message.populate("sender", "name pic")
     ).populate({
@@ -46,7 +53,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
 
     res.json(message);
-    console.log(message);
+
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
