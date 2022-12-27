@@ -18,6 +18,7 @@ import { ChatState } from "../../Context/ChatProvider";
 import { FormLabel } from '@chakra-ui/react';
 import { Switch } from '@chakra-ui/react'
 import './SingleChat.css';
+import { createWorker } from 'tesseract.js';
 const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -31,10 +32,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [picMessage, setPicMessage] = useState();
   const [previewImg, setpreviewImg] = useState(false);
   const toast = useToast();
-
+  const [ocr, setOcr] = useState('');
+  const worker = createWorker({
+    logger: m => <></>
+  });
+  const doOCR = async (pic) => {
+    await worker.load();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+    const { data: { text } } = await worker.recognize(pic);
+    console.log("text is ");
+    console.log(text);
+    setOcr(text);
+  };
+  useEffect(() => {
+    doOCR(pic);
+    //imp -otherwise no text would be printed 
+  });
   const closePreview = () => {
     setpreviewImg(false);
+    console.log("called");
+    // doOCR(pic);
   }
+  
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -43,6 +63,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
+
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
 
@@ -83,6 +104,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.log("hasda");
       socket.emit("stop typing", selectedChat._id);
       if(previewImg && pic){
+        
         try {
           const config = {
             headers: {
@@ -90,12 +112,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               Authorization: `Bearer ${user.token}`,
             },
           };
+          await doOCR(pic);
+          console.log(ocr);
           setNewMessage("");
           const { data } = await axios.post(
             "/api/message",
             {
               isImg:true,
               ImgContent:pic,
+              ImgOCRContent:ocr,
               content:newMessage ? newMessage:"empty",
               chatId: selectedChat,
             },

@@ -23,7 +23,7 @@ const allMessages = asyncHandler(async (req, res) => {
 //@access          Protected
 const sendMessage = asyncHandler(async (req, res) => {
   
-  const {isImg,ImgContent, content, chatId } = req.body;
+  const {isImg,ImgContent, ImgOCRContent, content, chatId } = req.body;
 
   if (!chatId) {
     console.log("Invalid data passed into request");
@@ -34,11 +34,11 @@ const sendMessage = asyncHandler(async (req, res) => {
   try {
     var message;
     if(isImg){
-     message = await Message.create({ sender: req.user._id,isImg:true,ImgContent:ImgContent, content:content, chat: chatId });
+     message = await Message.create({ sender: req.user._id,isImg:true,ImgContent:ImgContent,ImgOCRContent:ImgOCRContent, content:content, chat: chatId });
      console.log(message);
     }
     else{
-      message = await Message.create({ sender: req.user._id,isImg:false,ImgContent:"", content:content, chat: chatId });
+      message = await Message.create({ sender: req.user._id,isImg:false,ImgOCRContent:"",ImgContent:"", content:content, chat: chatId });
       console.log(message);
     }
     message = await (
