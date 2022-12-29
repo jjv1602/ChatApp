@@ -101,10 +101,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const sendMessage = async (event) => {
     if (newMessage || previewImg) {
-      console.log("hasda");
       socket.emit("stop typing", selectedChat._id);
       if(previewImg && pic){
-        
+        await doOCR(pic);
         try {
           const config = {
             headers: {
@@ -112,8 +111,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               Authorization: `Bearer ${user.token}`,
             },
           };
-          await doOCR(pic);
-          console.log(ocr);
+          
+          console.log("ocr");
           setNewMessage("");
           const { data } = await axios.post(
             "/api/message",
@@ -121,12 +120,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               isImg:true,
               ImgContent:pic,
               ImgOCRContent:ocr,
-              content:newMessage ? newMessage:"empty",
+              content:newMessage ? newMessage:"",
               chatId: selectedChat,
             },
             config
           );
           socket.emit("new message", data);
+          setpreviewImg(false);
           setMessages([...messages, data]);
         } catch (error) {
           toast({

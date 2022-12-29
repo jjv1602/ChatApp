@@ -37,6 +37,7 @@ const Header = () => {
         setNotification,
         chats,
         setChats,
+        block_good_morning,setBlockGoodMorning,
     } = ChatState();
     const navigate = useNavigate();
     const logout = () => {
@@ -113,7 +114,8 @@ const Header = () => {
         }
     };
 
-
+    
+    const block=false;
     return (
         <Box
             w="100%"
@@ -165,11 +167,11 @@ const Header = () => {
                             <MenuItem  fontSize="1.4rem"  fontFamily={"'Fredoka', sans-serif "} >My Profile</MenuItem>{" "}
                         </ProfileModal>
                         <MenuItem >
-                        <FormControl display='flex' alignItems='center'>
+                        <FormControl display='flex' alignItems='center' >
                             <FormLabel htmlFor='email-alerts' mb='0'  fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>
                                 Block Images with text
                             </FormLabel>
-                            <Switch id='block_good_morning' /></FormControl>
+                            <Switch id='block_good_morning' onChange={(e)=>setBlockGoodMorning(e.target.value)}/></FormControl>
                         </MenuItem>
                         
                         <MenuItem onClick={logout} fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>Logout</MenuItem>
