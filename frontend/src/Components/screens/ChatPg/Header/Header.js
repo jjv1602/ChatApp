@@ -167,17 +167,11 @@ const Header = () => {
                         <MenuItem >
                         <FormControl display='flex' alignItems='center'>
                             <FormLabel htmlFor='email-alerts' mb='0'  fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>
-                                Block Good Morning Messages
+                                Block Images with text
                             </FormLabel>
-                            <Switch id='email-alerts' /></FormControl></MenuItem>
-                        <MenuItem >
-                            <FormControl display='flex' alignItems='center'>
-                            <FormLabel   fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "} htmlFor='email-alerts' mb='0'>
-                                Block Abusive Content
-                            </FormLabel>
-                            <Switch id='email-alerts' />
-                            </FormControl>
+                            <Switch id='block_good_morning' /></FormControl>
                         </MenuItem>
+                        
                         <MenuItem onClick={logout} fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>Logout</MenuItem>
                     </MenuList>
                 </Menu>

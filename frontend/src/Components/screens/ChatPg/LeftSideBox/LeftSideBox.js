@@ -1,5 +1,5 @@
 import React from 'react'
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, BellIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
@@ -20,7 +20,7 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react'
 const LeftSideBox = () => {
     const [loggedUser, setLoggedUser] = useState();
 
@@ -32,8 +32,8 @@ const LeftSideBox = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
-    
 
+    const { notification } = ChatState();
     const handleSearch = async () => {
 
         if (!search) {
@@ -133,7 +133,7 @@ const LeftSideBox = () => {
     }, []);
 
     return (
-    
+
         <Box
             display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
             flexDir="column"
@@ -141,10 +141,10 @@ const LeftSideBox = () => {
             justifyContent="space-between"
             p={1}
             bg="#181C34"
-            w={{ base: "100%",sm:"100%", md: "40%" }}
+            w={{ base: "100%", sm: "100%", md: "40%" }}
             borderRadius="lg"
             borderWidth="1px"
-           
+
         >
             <Box
                 pb={3}
@@ -159,45 +159,45 @@ const LeftSideBox = () => {
 
             >
                 <Button w={450} variant="ghost" bg={"#dce5f8"} onClick={onOpen} >
-                <Text fontSize="lg" pl={"2px"} ml={"2px"} fontFamily= {"'Fredoka', sans-serif "}>
-                    Search <i className="fas fa-search" p={4}></i>
-                </Text>
-            </Button>
-           
+                    <Text fontSize="lg" pl={"2px"} ml={"2px"} fontFamily={"'Fredoka', sans-serif "}>
+                        Search <i className="fas fa-search" p={4}></i>
+                    </Text>
+                </Button>
 
-            {/* Search Side Drawer */}
-            <Drawer
-                isOpen={isOpen}
-                placement='left'
-                onClose={onClose}
-                finalFocusRef={btnRef}
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Search Users </DrawerHeader>
-                    <DrawerBody>
-                        <Box pb={2} >
-                            <Input placeholder='Search User here...'
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                            <Button colorScheme='blue' onClick={handleSearch} w='140px' ml="50%" mt={3} p={1}>Search </Button>
-                        </Box>
 
-                        {/* if loading then component chatloading which is skeleton chakra */}
-                        {loading ? (<ChatLoading />
-                        ) : (
-                            searchResult?.map((res) => (
-                                <SearchListItem
-                                    key={res._id}
-                                    user={res}
-                                    handleFunction={() => accessChat(res._id)}
+                {/* Search Side Drawer */}
+                <Drawer
+                    isOpen={isOpen}
+                    placement='left'
+                    onClose={onClose}
+                    finalFocusRef={btnRef}
+                >
+                    <DrawerOverlay />
+                    <DrawerContent>
+                        <DrawerCloseButton />
+                        <DrawerHeader>Search Users </DrawerHeader>
+                        <DrawerBody>
+                            <Box pb={2} >
+                                <Input placeholder='Search User here...'
+                                    onChange={(e) => setSearch(e.target.value)}
                                 />
-                            ))
-                        )}
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
+                                <Button colorScheme='blue' onClick={handleSearch} w='140px' ml="50%" mt={3} p={1}>Search </Button>
+                            </Box>
+
+                            {/* if loading then component chatloading which is skeleton chakra */}
+                            {loading ? (<ChatLoading />
+                            ) : (
+                                searchResult?.map((res) => (
+                                    <SearchListItem
+                                        key={res._id}
+                                        user={res}
+                                        handleFunction={() => accessChat(res._id)}
+                                    />
+                                ))
+                            )}
+                        </DrawerBody>
+                    </DrawerContent>
+                </Drawer>
 
                 {/* Add group chat button on left side  */}
                 {/* on clicking Modal would be open  */}
@@ -211,7 +211,7 @@ const LeftSideBox = () => {
                     </Button>
                 </GrpChatModal>
             </Box>
-           
+
             <Box
                 display="flex"
                 flexDir="column"
@@ -223,7 +223,7 @@ const LeftSideBox = () => {
                 overflowY="hidden"
                 backgroundColor='#181C34'
             >
-                <Text  fontSize='lg'  fontWeight="bold" color='#ffffff' >Your Messages</Text>
+                <Text fontSize='lg' fontWeight="bold" color='#ffffff' >Your Messages</Text>
                 <br></br>
                 {chats ? (
                     <Stack overflowY="scroll"
@@ -254,25 +254,40 @@ const LeftSideBox = () => {
                                 key={chat._id}
                                 display="flex"
                             >
-                                
-                               <Avatar id="av"   size='lg' src={chat.users[1].pic} />
-                              <Box display="flex" flexDirection="column" pl="4">
-                                <Text id="person" fontSize='2xl' color='#ffffff'   fontWeight="bold">
-                                    {!chat.isGroupChat
-                                        ? getSender(loggedUser, chat.users)
-                                        : chat.chatName}
-                                </Text>
-    
-                                {chat.latestMessage && (
-                                    <Text fontSize='md' color='#ffffff'>
-                                        <b>{chat.latestMessage.sender.name===user.name? "You" : chat.latestMessage.sender.name} : </b>
-                                        {chat.latestMessage.content.length > 50
-                                            ? chat.latestMessage.content.substring(0, 51) + "..."
-                                            : chat.latestMessage.content}
+
+                                <Avatar id="av" size='lg' src={chat.users[1].pic} />
+                                <Box display="flex" flexDirection="column" pl="4">
+                                    <Text id="person" fontSize='2xl' color='#ffffff' fontWeight="bold">
+                                        {!chat.isGroupChat
+                                            ? getSender(loggedUser, chat.users)
+                                            : chat.chatName}
                                     </Text>
-                                )}
+
+                                    {chat.latestMessage && (
+                                        <Text fontSize='md' color='#ffffff'>
+                                            <b>{chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : </b>
+                                            {chat.latestMessage.content.length > 50
+                                                ? chat.latestMessage.content.substring(0, 51) + "..."
+                                                : chat.latestMessage.content}
+                                        </Text>
+                                    )}
+
+                                </Box>
+                                {console.log("notification")}
+                                {console.log(notification)}
+                                {(notification.map((not) => (
+                                    <>
+                                    {not.sender.name.includes(chat.latestMessage.sender.name)
+                                             &&
+                                            <Button colorScheme='green' borderRadius="20" ml={"65%"} ><BellIcon/></Button>
+                                    }
+                                    </>
+
+                                )
+                                ))
+                                }
                             </Box>
-                            </Box>
+
                         ))}
                     </Stack>
                 ) : (

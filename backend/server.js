@@ -50,7 +50,8 @@ const io = require("socket.io")(server, {
   
     // this is new message object
     socket.on("new message", (newMessageRecieved) => {
-    
+      
+      // when we receive new msg we need to see in which room we need to send the msg
       var chat = newMessageRecieved.chat;
   
     
@@ -60,7 +61,8 @@ const io = require("socket.io")(server, {
           
           // in a group if new msg received then do not send it to user itself
           if (user._id == newMessageRecieved.sender._id) return;
-  
+        
+          // socket.in means that user's room emit or send that msg
         socket.in(user._id).emit("message recieved", newMessageRecieved);
       });
     });

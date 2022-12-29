@@ -218,6 +218,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat]);
 
   useEffect(() => {
+    // this means if we receive any msg
     socket.on("message recieved", (newMessageRecieved) => {
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
@@ -225,6 +226,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       ) {
         // if notification does not includes already received msg
         if (!notification.includes(newMessageRecieved)) {
+          // give notification
           setNotification([newMessageRecieved, ...notification]);
           setFetchAgain(!fetchAgain);
         }

@@ -8,13 +8,14 @@ import RightSideBox from './RightSideBox/RightSideBox';
 import { ChatState } from '../../Context/ChatProvider';
 // import { useNavigate } from 'react-router-dom';
 const ChatPg = () => {
+  const [fetchAgain, setFetchAgain] = useState(false);
   const {user}=ChatState();
   return (
     <div className={style.main}>
       <Header></Header>
       <Box display="flex" p={"2px"}  w="100%" h={"88vh"}>
         {user&&<LeftSideBox ></LeftSideBox>}
-        {user&&<RightSideBox></RightSideBox>}
+        {user&&<RightSideBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}></RightSideBox>}
       </Box>
 
     </div>
