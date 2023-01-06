@@ -55,8 +55,10 @@ const authUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        token: generateToken(user._id), //json web token see video 10 from 30:00
+        blockWords:user.blockWords,
+        blockSwitch:user.blockSwitch,
         pic:user.pic,
+        token: generateToken(user._id), //json web token see video 10 from 30:00
       });
     } else {
       res.status(401);
@@ -115,4 +117,27 @@ const allUsers = asyncHandler(async (req, res) => {
   console.log(users);
   res.send(users);
 });
-module.exports = { registerUser,authUser,updateUserProfile,allUsers,admin_get_users };
+const modify_block_word_list=asyncHandler(async(req,res)=>{
+  const { email,blockWords,blockSwitch} = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+
+      user.blockWords=blockWords||user.blockWords;
+      user.blockSwitch=blockSwitch||user.blockSwitch;
+      const updatedUser = await user.save();
+      console.log(updatedUser);
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        blockWords:updatedUser.blockWords,
+        blockSwitch:updatedUser.Switch,
+        pic:user.pic,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(404);
+      throw new Error("User Not Found");
+    }
+})
+module.exports = { registerUser,authUser,updateUserProfile,allUsers,admin_get_users,modify_block_word_list };

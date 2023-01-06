@@ -8,7 +8,8 @@ const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState();
-  const [block_good_morning,setBlockGoodMorning]=useState(false);
+  const[blockSwitch,setblockSwitch]=useState(false);
+  const[blockWords,setblockWords]=useState([]);
   const navigate=useNavigate();
 
   useEffect(() => {
@@ -29,8 +30,7 @@ const ChatProvider = ({ children }) => {
         setNotification,
         chats,
         setChats,
-        block_good_morning,
-        setBlockGoodMorning,
+        blockSwitch,setblockSwitch,blockWords,setblockWords,
       }}
     >
       {children}

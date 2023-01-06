@@ -273,8 +273,7 @@ const LeftSideBox = () => {
                                     )}
 
                                 </Box>
-                                {console.log("notification")}
-                                {console.log(notification)}
+                               
                                 {(notification.map((not) => (
                                     <>
                                     {not.sender.name.includes(chat.latestMessage.sender.name)

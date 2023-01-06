@@ -8,21 +8,26 @@ import {
 import { ChatState } from "../../Context/ChatProvider";
 import './ScrollableChat.css';
 import { Avatar, Box, Heading, Image, Text, Tooltip } from '@chakra-ui/react'
+import { useEffect, useState } from "react";
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
-
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const [blockWords, setblockWords] = useState(userInfo.blockWords);
+  const [blockSwitch, setBlockSwitch] = useState(userInfo.blockSwitch);
+  const [AllWordsPresent, setAllWordsPresent] = useState(false);
+  useEffect(() => {
+    setblockWords(userInfo.blockWords);
+    setBlockSwitch(userInfo.blockSwitch);
+  }, [localStorage.getItem('userInfo')]);
   return (
 
     <>
       {messages &&
         messages.map((m, i) => (
           <>
-
-
             <div style={{ display: "flex" }} key={m._id}>
               {isfirst_msg_of_Sender(messages, m, i, user._id) &&
                 <>
-
                   <Avatar id="av" size='lg' src={m.sender.pic} />
                   <Box className="message-body"
                     style={{
@@ -65,13 +70,39 @@ const ScrollableChat = ({ messages }) => {
                   }}
 
                 >
-                  <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
-                  {m.isImg && !m.ImgOCRContent.includes("Good") && !m.ImgOCRContent.includes("Morning")  ? <Image
-                    boxSize='150px'
-                    objectFit='cover'
-                    src={m.ImgContent}
-                  /> : (<></>)}
-                  <Text >{m.content}</Text>
+                  {blockWords.map((words, i) => {
+                      const arr=words.split('');
+                      setAllWordsPresent(true);
+                      arr.forEach(word => {
+                        if (!m.imgContent.includes(word)) {
+                          setAllWordsPresent(false);
+                        }
+                      });
+                    
+                      return(
+                        <>
+                        {   m.isImg && m.sender.name !== user.name ?
+                        <>
+                          <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
+                          <Image
+                            boxSize='150px'
+                            objectFit='cover'
+                            src={m.ImgContent}
+                          />
+                          <Text >{m.content}</Text>
+                        </>:
+                        
+                        (
+                        <>
+                        <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
+                        <Text >{m.content}</Text>
+                        </>
+                        )
+                        }
+                        
+                        </> 
+                      )
+                  })}
                 </Box>
 
               }

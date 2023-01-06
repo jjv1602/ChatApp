@@ -1,10 +1,10 @@
 import {
-    Box, Button, Tooltip, Text, Menu, MenuButton, MenuList, MenuItem, Image, Avatar, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input
+    Box, Button, Tooltip, Text, Menu, MenuButton, MenuList, MenuItem, Image, Avatar, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, GridItem, Grid, Badge
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NotificationBadge from "react-notification-badge";  //installed using npm install --save react-notification-badge
 import { Effect } from "react-notification-badge";
-import { BellIcon, ChatIcon, ChevronDownIcon } from '@chakra-ui/icons'; //https://chakra-ui.com/docs/components/icon/usage
+import { BellIcon, ChatIcon, ChevronDownIcon, CloseIcon, Icon } from '@chakra-ui/icons'; //https://chakra-ui.com/docs/components/icon/usage
 import style from './Header.module.css';
 import ProfileModal from '../ProfileModal/ProfileModal';
 import { useNavigate } from 'react-router-dom';
@@ -21,15 +21,17 @@ import {
     FormLabel,
     FormErrorMessage,
     FormHelperText,
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react'
 
 const Header = () => {
     const toast = useToast();
     const btnRef = React.useRef();//for drawer
-    const [search, setSearch] = useState();
-    const [searchResult, setSearchResult] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [loadingChat, setLoadingChat] = useState(false);
+    const [new_block_word, setNew_block_word] = useState("");
+    const [blockWords, setblockWords] = useState(["good morning", "happy"]);
+    const[blockSwitch,setBlockSwitch]=useState(false);
+    // const userInfo=JSON.parse(localStorage.getItem('userInfo')).name;
+    const userInfo=JSON.parse(localStorage.getItem('userInfo'));
+    const [email, setEmail] = useState(userInfo.email);
     const {
         setSelectedChat,
         user,
@@ -37,7 +39,7 @@ const Header = () => {
         setNotification,
         chats,
         setChats,
-        block_good_morning,setBlockGoodMorning,
+        block_good_morning, setBlockGoodMorning,
     } = ChatState();
     const navigate = useNavigate();
     const logout = () => {
@@ -45,77 +47,46 @@ const Header = () => {
         navigate("/");
     }
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-
-    const handleSearch = async () => {
-
-        if (!search) {
-            toast({
-                title: "Please Enter something in search",
-                status: "warning",
-                duration: 5000,
-                isClosable: true,
-                position: "top-left",
-            });
-            return;
-        }
-        try {
-            setLoading(true);
-
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            };
-
-            const { data } = await axios.get(`/api/users/getUser?search=${search}`, config);
-
-            setLoading(false);
-            setSearchResult(data);
-        } catch (error) {
-            toast({
-                title: "Error Occured!",
-                description: "Failed to Load the Search Results",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom-left",
-            });
-        }
-    };
-
-
-    const accessChat = async (userId) => {
-
-
-        try {
-            setLoadingChat(true);
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    Authorization: `Bearer ${user.token}`,
-                },
-            };
-            const { data } = await axios.post(`/api/chat`, { userId }, config);
-
-            if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-            setSelectedChat(data);
-            setLoadingChat(false);
-            onClose();
-        } catch (error) {
-            toast({
-                title: "Error fetching the chat",
-                description: error.message,
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom-left",
-            });
-        }
-    };
-
     
-    const block=false;
+
+
+    const add_block_word = () => {
+        if (new_block_word !== "") {
+            
+            setblockWords([...blockWords, new_block_word]);
+        }
+    }
+
+    const removeItemfromblock = (txt) => {
+        console.log("delete");
+        delete blockWords[blockWords.findIndex((el) => el === txt)];
+        console.log(blockWords);
+    }
+
+    const updateBlockList=async(email,blockWords,blockSwitch)=>{
+            try {
+                console.log(userInfo);
+                const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                };
+                const { data } = await axios.put(`/api/users/modify_block_words_list`, { email,blockWords,blockSwitch }, config);
+                localStorage.setItem("userInfo", JSON.stringify(data));    
+               
+            } catch (error) {
+                toast({
+                    title: "Error Updating block list",
+                    description: error.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left",
+                });
+            }
+        }
+    
     return (
         <Box
             w="100%"
@@ -162,17 +133,32 @@ const Header = () => {
                             src={user.pic}
                         />
                     </MenuButton>
-                    <MenuList p={2}>
+                    <MenuList p={2} bg={"#dce5f8"}>
                         <ProfileModal user={user}>
-                            <MenuItem  fontSize="1.4rem"  fontFamily={"'Fredoka', sans-serif "} >My Profile</MenuItem>{" "}
+                            <MenuItem fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "} >My Profile</MenuItem>{" "}
                         </ProfileModal>
                         <MenuItem >
-                        <FormControl display='flex' alignItems='center' >
-                            <FormLabel htmlFor='email-alerts' mb='0'  fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>
-                                Block Images with text
-                            </FormLabel>
-                            <Switch id='block_good_morning' onChange={(e)=>setBlockGoodMorning(e.target.value)}/></FormControl>
+                            <FormControl display='flex' alignItems='center' >
+                                <FormLabel htmlFor='email-alerts' mb='0' fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>
+                                    Block Images with text
+                                </FormLabel>
+                                <Switch id='block_good_morning' onChange={(e) => setBlockGoodMorning(e.target.value)} /></FormControl>
+                            <Button onClick={add_block_word}>Add Word</Button>
+                            <br></br>
                         </MenuItem>
+                        <Input width='auto' color={"#ffffff"} w={80} onChange={(e) => setNew_block_word(e.target.value)} placeholder='Type the word to Block' bg={"#2e2c42"} />
+                        <br></br>
+                        <Box w='90%' mt={3} p={4} bg='#ffffff'>
+
+                            {blockWords.map((txt) => (
+                                <Badge colorScheme='red' fontSize='0.8em' p={1} m={1} >{txt} <Button m={1} size="sm" onClick={() => removeItemfromblock(txt)}><Icon as={CloseIcon} boxSize={2} /></Button></Badge>
+                            )
+                            )}
+                            <br></br>    
+                            <Button colorScheme='teal' size='md' m={2} ml="70%" onClick={()=>updateBlockList(email,blockWords,blockSwitch)}>
+                                Save
+                            </Button>
+                        </Box>
                         
                         <MenuItem onClick={logout} fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>Logout</MenuItem>
                     </MenuList>

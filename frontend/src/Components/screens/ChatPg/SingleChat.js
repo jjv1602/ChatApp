@@ -180,7 +180,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       data.append("file", pics);
       data.append("upload_preset", "eventmanage");
       data.append("cloud_name", "dxxu4powb");
-      console.log("hasdjasjdoa")
+    
       fetch("https://api.cloudinary.com/v1_1/dxxu4powb/image/upload", {
         method: "post",
         body: data,
