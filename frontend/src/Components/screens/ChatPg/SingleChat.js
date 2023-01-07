@@ -48,11 +48,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     doOCR(pic);
     //imp -otherwise no text would be printed 
-  });
+  },[previewImg]);
   const closePreview = () => {
     setpreviewImg(false);
-    console.log("called");
-    // doOCR(pic);
   }
   
   const defaultOptions = {

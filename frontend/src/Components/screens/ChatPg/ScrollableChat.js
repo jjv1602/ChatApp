@@ -3,7 +3,7 @@ import ScrollableFeed from "react-scrollable-feed";
 import {
   isSameSender,
   isSameSenderMargin,
-  isSameUser, isfirst_msg_of_Sender,
+  isSameUser, isfirst_msg_of_Sender, checkingBlockContent,
 } from "../../../config/ChatLogics";
 import { ChatState } from "../../Context/ChatProvider";
 import './ScrollableChat.css';
@@ -70,46 +70,33 @@ const ScrollableChat = ({ messages }) => {
                   }}
 
                 >
-                  {blockWords.map((words, i) => {
-                      const arr=words.split('');
-                      setAllWordsPresent(true);
-                      arr.forEach(word => {
-                        if (!m.imgContent.includes(word)) {
-                          setAllWordsPresent(false);
-                        }
-                      });
+                {m.isImg && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
+                    <>
                     
-                      return(
-                        <>
-                        {   m.isImg && m.sender.name !== user.name ?
-                        <>
-                          <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
-                          <Image
-                            boxSize='150px'
-                            objectFit='cover'
-                            src={m.ImgContent}
-                          />
-                          <Text >{m.content}</Text>
-                        </>:
-                        
-                        (
-                        <>
-                        <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
-                        <Text >{m.content}</Text>
-                        </>
-                        )
-                        }
-                        
-                        </> 
-                      )
-                  })}
-                </Box>
+                      <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
+                      <Image
+                        boxSize='150px'
+                        objectFit='cover'
+                        src={m.ImgContent}
+                      />
+                      <Text >{m.content}</Text>
+                    </>
+                  }
+
+              
+              {!m.isImg && <>
+                <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
+                <Text >{m.content}</Text>
+              </>}
+
+            </Box>
 
               }
 
-            </div>
+          </div>
           </>
-        ))}
+  ))
+}
     </>
   );
 
