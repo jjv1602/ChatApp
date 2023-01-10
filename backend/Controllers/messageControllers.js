@@ -6,6 +6,10 @@ const Chat = require("../models/chatModel");
 //@description     Get all Messages
 //@route           GET /api/Message/:chatId
 //@access          Protected
+const deleteallMessages=asyncHandler(async(req,res)=>{
+await Message.deleteMany({});
+console.log("delert");
+})
 const allMessages = asyncHandler(async (req, res) => {
   try {
     const messages = await Message.find({ chat: req.params.chatId })
@@ -60,4 +64,4 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allMessages, sendMessage };
+module.exports = { allMessages, sendMessage ,deleteallMessages};

@@ -58,9 +58,9 @@ const Header = () => {
     }
 
     const removeItemfromblock = (txt) => {
-        console.log("delete");
+        
         delete blockWords[blockWords.findIndex((el) => el === txt)];
-        console.log(blockWords);
+        // console.log(blockWords);
     }
 
     const updateBlockList=async(email,blockWords,blockSwitch)=>{

@@ -32,7 +32,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [picMessage, setPicMessage] = useState();
   const [previewImg, setpreviewImg] = useState(false);
   const toast = useToast();
-  const [ocr, setOcr] = useState('');
   const worker = createWorker({
     logger: m => <></>
   });
@@ -41,14 +40,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
     const { data: { text } } = await worker.recognize(pic);
-    console.log("text is ");
-    console.log(text);
-    setOcr(text);
+    return text;
+
   };
-  useEffect(() => {
-    doOCR(pic);
-    //imp -otherwise no text would be printed 
-  },[previewImg]);
+  
   const closePreview = () => {
     setpreviewImg(false);
   }
@@ -101,7 +96,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     if (newMessage || previewImg) {
       socket.emit("stop typing", selectedChat._id);
       if(previewImg && pic){
-        await doOCR(pic);
         try {
           const config = {
             headers: {
@@ -109,8 +103,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               Authorization: `Bearer ${user.token}`,
             },
           };
+          const ocr=await doOCR(pic);
           
-          console.log("ocr");
+          console.log("ocr checkadknadknakdskandkaksd");
+          console.log(ocr);
           setNewMessage("");
           const { data } = await axios.post(
             "/api/message",
@@ -123,6 +119,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             },
             config
           );
+          console.log("ocr checkadknadknakdskandkaksd");
           socket.emit("new message", data);
           setpreviewImg(false);
           setMessages([...messages, data]);

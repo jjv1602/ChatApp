@@ -43,22 +43,22 @@ export const isLastMessage = (messages, i, userId) => {
   );
 };
 export const checkingBlockContent = (blockWords, ImgOCRContent) => {
-  console.log(blockWords);
+  // console.log(blockWords);
     blockWords.map((words, i) => {
       const arr = words.split(" ");
       let AllWordsPresent=true;
       let temp="";
-      console.log(ImgOCRContent);
+      // console.log(ImgOCRContent);
       arr.forEach(word => {
-        console.log("lkj");
-        console.log(word);
+        // console.log("lkj");
+        // console.log(word);
         // if (!ImgOCRContent.toLowerCase().includes(word.toLowerCase())) {
         //   AllWordsPresent=false;
         // }
-        console.log(ImgOCRContent.toLowerCase().includes(word.toLowerCase()));
+        // console.log(ImgOCRContent.toLowerCase().includes(word.toLowerCase()));
       });
       if(AllWordsPresent===true){
-        console.log("temp");
+        // console.log("temp");
         return true;
       }
     })
