@@ -43,27 +43,22 @@ export const isLastMessage = (messages, i, userId) => {
   );
 };
 export const checkingBlockContent = (blockWords, ImgOCRContent) => {
-  // console.log(blockWords);
-    blockWords.map((words, i) => {
-      const arr = words.split(" ");
-      let AllWordsPresent=true;
-      let temp="";
-      // console.log(ImgOCRContent);
-      arr.forEach(word => {
-        // console.log("lkj");
-        // console.log(word);
-        // if (!ImgOCRContent.toLowerCase().includes(word.toLowerCase())) {
-        //   AllWordsPresent=false;
-        // }
-        // console.log(ImgOCRContent.toLowerCase().includes(word.toLowerCase()));
-      });
-      if(AllWordsPresent===true){
-        // console.log("temp");
-        return true;
+  for (let i = 0; i < blockWords.length; i++) {
+    const arr = blockWords[i].split(" ");
+    let AllWordsPresent = true;
+    for (let j = 0; j < arr.length; j++) {
+      if (!ImgOCRContent.toLowerCase().includes(arr[j].toLowerCase())) {
+        AllWordsPresent = false;
+        break;
       }
-    })
-    return false;
+    }
+    if (AllWordsPresent) {
+      return true;
+    }
+  }
+  return false;
 };
+
 
 export const isSameUser = (messages, m, i) => {
   return i > 0 && messages[i - 1].sender._id === m.sender._id;

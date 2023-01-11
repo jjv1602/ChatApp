@@ -105,8 +105,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           };
           const ocr=await doOCR(pic);
           
-          console.log("ocr checkadknadknakdskandkaksd");
-          console.log(ocr);
           setNewMessage("");
           const { data } = await axios.post(
             "/api/message",
@@ -119,7 +117,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             },
             config
           );
-          console.log("ocr checkadknadknakdskandkaksd");
+          
           socket.emit("new message", data);
           setpreviewImg(false);
           setMessages([...messages, data]);
