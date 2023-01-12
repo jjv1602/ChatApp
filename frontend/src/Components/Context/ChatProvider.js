@@ -11,12 +11,9 @@ const ChatProvider = ({ children }) => {
   const[blockSwitch,setblockSwitch]=useState(false);
   const[blockWords,setblockWords]=useState([]);
   const navigate=useNavigate();
-
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
-    if (!userInfo) navigate("/");
-    
   }, [navigate]);
 
   return (

@@ -25,9 +25,10 @@ const ProfileModal = ({ user, children }) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const [pic, setPic] = useState(user.pic ? user.pic : "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg");
+  const userInfo=JSON.parse(localStorage.getItem('userInfo'));
+  const [pic, setPic] = useState(userInfo.pic ? userInfo.pic : "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg");
   const [picMessage, setPicMessage] = useState();
-  const [email,setEmail]=useState(user.email);
+  const [email,setEmail]=useState(userInfo.email);
 
 
   const postDetails = (pics) => {
@@ -113,7 +114,7 @@ const ProfileModal = ({ user, children }) => {
             display="flex"
             justifyContent="center"
           >
-            {user.name}
+            {userInfo.name}
 
 
           </ModalHeader>
@@ -127,7 +128,7 @@ const ProfileModal = ({ user, children }) => {
 
             <FormControl>
               <FormLabel>Email address</FormLabel>
-              <Input type='email' value={user.email} disabled />
+              <Input type='email' value={userInfo.email} disabled />
             </FormControl>
             <FormControl >
               <Input

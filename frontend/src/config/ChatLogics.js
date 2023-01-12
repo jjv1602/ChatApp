@@ -20,9 +20,9 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
 
 export const isfirst_msg_of_Sender = (messages, m, i, userId) => {
   return (
-    i < messages.length && i>1 &&
-    messages[i - 1].sender._id !== m.sender._id &&
-    messages[i].sender._id !== userId
+    (i < messages.length && i>0 && 
+    messages[i - 1].sender._id !== messages[i].sender._id &&
+    messages[i].sender._id !== userId ) || (i===0&& messages[i].sender._id !== userId  )
     )
 };
 

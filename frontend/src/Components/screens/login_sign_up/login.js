@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, u
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ChatState } from '../../Context/ChatProvider';
 const Login = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -10,13 +11,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  
-  useEffect(() => {
-    const userInfo=JSON.parse(localStorage.getItem('userInfo'));
-    if (userInfo) {
-      navigate("/chat");
-    }
-  }, [navigate, JSON.parse(localStorage.getItem('userInfo'))]);
+  const {
+    
+    user,setUser
+   
+} = ChatState();
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
@@ -36,10 +35,9 @@ const Login = () => {
           "Content-type": "application/json",
         },
       };
-      console.log({email,password});
       const { data } = await axios.post(
         "api/users/login",
-        { email,password },
+        { email, password },
         config
       );
       toast({
@@ -49,9 +47,11 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
+
       localStorage.setItem("userInfo", JSON.stringify(data));
-      setLoading(false);
-     navigate("/chat");
+      setUser(JSON.stringify(data));
+  
+      navigate("/chat");
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -66,41 +66,41 @@ const Login = () => {
   };
   return (
     <VStack spacing="40px">
-    <FormControl id="email" isRequired>
-      <FormLabel>Email Address</FormLabel>
-      <Input
-        value={email}
-        type="email"
-        placeholder="Enter Your Email Address"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-    </FormControl>
-    <FormControl id="password" isRequired>
-      <FormLabel>Password</FormLabel>
-      <InputGroup size="md">
+      <FormControl id="email" isRequired>
+        <FormLabel>Email Address</FormLabel>
         <Input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type={show ? "text" : "password"}
-          placeholder="Enter password"
+          value={email}
+          type="email"
+          placeholder="Enter Your Email Address"
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <InputRightElement width="4.5rem">
-          <Button h="1.75rem" size="sm" onClick={handleClick}>
-            {show ? "Hide" : "Show"}
-          </Button>
-        </InputRightElement>
-      </InputGroup>
-    </FormControl>
-    <br></br>
-    <Button
-      colorScheme="blue"
-      width="100%"
-      onClick={submitHandler}
-      isLoading={loading}
-    >
-      Login
-    </Button>
-  </VStack>
+      </FormControl>
+      <FormControl id="password" isRequired>
+        <FormLabel>Password</FormLabel>
+        <InputGroup size="md">
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
+              {show ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+      <br></br>
+      <Button
+        colorScheme="blue"
+        width="100%"
+        onClick={submitHandler}
+        isLoading={loading}
+      >
+        Login
+      </Button>
+    </VStack>
   )
 }
 

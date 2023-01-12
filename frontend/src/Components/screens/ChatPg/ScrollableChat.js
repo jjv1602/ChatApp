@@ -26,9 +26,9 @@ const ScrollableChat = ({ messages }) => {
         messages.map((m, i) => (
           <>
             <div style={{ display: "flex" }} key={m._id}>
-              {isfirst_msg_of_Sender(messages, m, i, user._id) &&
+              {isfirst_msg_of_Sender(messages, m, i, user._id) && m.isImg && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
                 <>
-                  <Avatar id="av" size='lg' src={m.sender.pic} />
+                  <Avatar id="av" size='lg' src={m.sender.pic ? m.sender.pic :"https://bit.ly/dan-abramov"} />
                   <Box className="message-body"
                     style={{
                       backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
@@ -56,47 +56,56 @@ const ScrollableChat = ({ messages }) => {
               }
 
               {!isfirst_msg_of_Sender(messages, m, i, user._id) &&
-
-                <Box
-                  style={{
-                    backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
-                      }`,
-                    marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                    marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
-                    marginBottom: "10px",
-                    borderRadius: "20px",
-                    padding: "5px 15px",
-                    maxWidth: "75%",
-                  }}
-
-                >
-                {m.isImg && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
-                    <>
-                    
-                      <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
-                      <Image
-                        boxSize='150px'
-                        objectFit='cover'
-                        src={m.ImgContent}
-                      />
-                      <Text >{m.content}</Text>
-                    </>
-                  }
-
-              
-              {!m.isImg && <>
-                <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
-                <Text >{m.content}</Text>
-              </>}
-
-            </Box>
-
+              <>
+                {(m.isImg && (!checkingBlockContent(blockWords, m.ImgOCRContent) || m.sender.name === user.name)) &&
+                <>
+                  <Box
+                    style={{
+                      backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
+                        }`,
+                      marginLeft: isSameSenderMargin(messages, m, i, user._id),
+                      marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
+                      marginBottom: "10px",
+                      borderRadius: "20px",
+                      padding: "5px 15px",
+                      maxWidth: "75%",
+                    }}
+                  >
+                    <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
+                    <Image
+                      boxSize='150px'
+                      objectFit='cover'
+                      src={m.ImgContent}
+                    />
+                    <Text >{m.content}</Text>
+                  </Box>
+                </>
               }
 
-          </div>
+              {!m.isImg && <>
+                <Box
+                    style={{
+                      backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
+                        }`,
+                      marginLeft: isSameSenderMargin(messages, m, i, user._id),
+                      marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
+                      marginBottom: "10px",
+                      borderRadius: "20px",
+                      padding: "5px 15px",
+                      maxWidth: "75%",
+                    }}
+                  >
+                <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
+                <Text >{m.content}</Text>
+                </Box>
+              </>}
+              </>
+              }
+
+            </div>
           </>
-  ))
-}
+        ))
+      }
     </>
   );
 

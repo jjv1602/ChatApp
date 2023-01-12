@@ -35,6 +35,7 @@ const Header = () => {
     const {
         setSelectedChat,
         user,
+        setUser,
         notification,
         setNotification,
         chats,
@@ -43,6 +44,7 @@ const Header = () => {
     } = ChatState();
     const navigate = useNavigate();
     const logout = () => {
+        setUser("");
         localStorage.removeItem("userInfo");
         navigate("/");
     }
@@ -130,7 +132,7 @@ const Header = () => {
                         <Avatar
                             size="sm"
                             cursor="pointer"
-                            src={user.pic}
+                            src={userInfo.pic}
                         />
                     </MenuButton>
                     <MenuList p={2} bg={"#dce5f8"}>
