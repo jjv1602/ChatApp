@@ -22,7 +22,7 @@ import {
     DrawerCloseButton,
 } from '@chakra-ui/react'
 const LeftSideBox = () => {
-    const [loggedUser, setLoggedUser] = useState();
+    const [loggedUser, setLoggedUser] = useState(JSON.parse(localStorage.getItem("userInfo")));
 
     const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -127,7 +127,7 @@ const LeftSideBox = () => {
     };
 
     useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+     
         fetchChats();
         // eslint-disable-next-line
     }, []);
