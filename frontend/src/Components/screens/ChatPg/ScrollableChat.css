@@ -1,55 +1,20 @@
-.container {
-  clear: both;
-  position: relative;
-}
-
-.container .arrow {
-  width: 12px;
-  height: 20px;
-
-  position: relative;
-  float: left;
-  top: 6px;
-  right: -1px;
-}
-
-.container .arrow .outer {
-  width: 0;
-  height: 0;
-  border-right: 20px solid #000000;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
+.You_msg:before{
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-}
+  right:-20px;
+  top: 0%;
+  border-width: 20px;
+  border-style: solid;
+  border-color: #B9F5D0 transparent transparent transparent;
 
-.container .arrow .inner {
-  width: 0;
-  height: 0;
-  border-right: 20px solid #ffffff;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
+}
+.sender_msg:before{
+  content: "";
   position: absolute;
-  top: 0;
-  left: 2px;
-}
+  left:-19px;
+  top: 0%;
+  border-width: 20px;
+  border-style: solid;
+  border-color: #BEE3F8 transparent transparent transparent;
 
-.container .message-body {
-  float: left;
-  height: auto;
-  width: 300px;
-  border: 1px solid #CCC;
- 
-}
-
-.container .message-body  {
-  margin: 0;
-  padding: 0;
-}
-
-#av{
-  border: 5px  #49eb72;
-  border-style:ridge;
-  
 }

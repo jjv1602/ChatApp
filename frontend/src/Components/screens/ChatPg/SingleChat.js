@@ -81,14 +81,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Messages",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
+      // toast({
+      //   title: "Error Occured!",
+      //   description: "Failed to Load the Messages",
+      //   status: "error",
+      //   duration: 5000,
+      //   isClosable: true,
+      //   position: "bottom",
+      // });
     }
   };
 
@@ -278,7 +278,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               (!selectedChat.isGroupChat ? (
                 <>
                   
-
+                  {selectedChat.users[0].name.toUpperCase()}
                   <ProfileModal
                     user={getSenderFull(user, selectedChat.users)}
                   />
@@ -304,6 +304,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h="90%"
             borderRadius="lg"
             overflowY="hidden"
+          
           >
             {loading ? (
               <Spinner
@@ -335,12 +336,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
                         },
                         '&::-webkit-scrollbar-track': {
-                          background: "#b9bbf3",
+                          background: "#000000",
 
                         },
                         '&::-webkit-scrollbar-thumb': {
                           height: "1px",
-                          background: "#000000",
+                          background: "#b9bbf3",
                         },
                       }}
                     >

@@ -26,17 +26,18 @@ const ScrollableChat = ({ messages }) => {
         messages.map((m, i) => (
           <>
             <div style={{ display: "flex" }} key={m._id}>
-              {isfirst_msg_of_Sender(messages, m, i, user._id) && m.isImg && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
+              {isfirst_msg_of_Sender(messages, m, i, user._id)  && !m.isImg && 
                 <>
-                  <Avatar id="av" size='lg' src={m.sender.pic ? m.sender.pic :"https://bit.ly/dan-abramov"} />
-                  <Box className="message-body"
+                  <Avatar id="av" size='md' ml={"-40px"} src={m.sender.pic ? m.sender.pic :"https://bit.ly/dan-abramov"} />
+                  <Box  className= "sender_msg"
                     style={{
                       backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
                         }`,
+                        position:"relative",
                       marginLeft: isSameSenderMargin(messages, m, i, user._id),
                       marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
-                      marginBottom: "10px",
-                      borderRadius: "20px",
+                      marginBottom: "20px",
+                      borderRadius: "9px",
                       padding: "5px 15px",
                       maxWidth: "75%",
                     }}
@@ -54,21 +55,52 @@ const ScrollableChat = ({ messages }) => {
 
                 </>
               }
+              {isfirst_msg_of_Sender(messages, m, i, user._id) && m.isImg && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
+                <>
+                  <Avatar id="av" size='lg' src={m.sender.pic ? m.sender.pic :"https://bit.ly/dan-abramov"} />
+                  <Box  className= "sender_msg"
+                    style={{
+                      backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
+                        }`,
+                        position:"relative",
+                      marginLeft: isSameSenderMargin(messages, m, i, user._id),
+                      marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
+                      marginBottom: "10px",
+                      borderRadius: "9px",
+                      padding: "5px 15px",
+                      maxWidth: "75%",
+                    }}
+
+                  >
+                    <Heading size="sm">{m.sender.name} qrqwrqoj</Heading>
+                    {m.isImg ? <Image
+                      boxSize='150px'
+                      objectFit='cover'
+                      src={m.ImgContent}
+                      alt='Dan Abramov'
+                    /> : (<></>)}
+                    <Text>{m.content}</Text>
+                  </Box>
+
+                </>
+              }
 
               {!isfirst_msg_of_Sender(messages, m, i, user._id) &&
               <>
                 {(m.isImg && (!checkingBlockContent(blockWords, m.ImgOCRContent) || m.sender.name === user.name)) &&
                 <>
-                  <Box
+                  <Box className={m.sender._id === user._id ? "You_msg": " "}
                     style={{
                       backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
                         }`,
+                        position:"relative",
                       marginLeft: isSameSenderMargin(messages, m, i, user._id),
                       marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
                       marginBottom: "10px",
-                      borderRadius: "20px",
+                      borderRadius: "9px",
                       padding: "5px 15px",
                       maxWidth: "75%",
+                      
                     }}
                   >
                     <Heading size="sm">{m.sender.name === user.name ? "You" : m.sender.name}</Heading>
@@ -83,14 +115,15 @@ const ScrollableChat = ({ messages }) => {
               }
 
               {!m.isImg && <>
-                <Box
+                <Box  className={m.sender._id === user._id ? "You_msg": " "}
                     style={{
                       backgroundColor: `${m.sender._id === user._id ? "#B9F5D0" : "#BEE3F8"
                         }`,
+                        position:"relative",
                       marginLeft: isSameSenderMargin(messages, m, i, user._id),
                       marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
                       marginBottom: "10px",
-                      borderRadius: "20px",
+                      borderRadius: "9px",
                       padding: "5px 15px",
                       maxWidth: "75%",
                     }}

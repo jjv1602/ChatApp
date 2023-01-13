@@ -87,6 +87,9 @@ const LeftSideBox = () => {
 
             if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
             setSelectedChat(data);
+
+            console.log("selectedChat");
+            console.log(selectedChat);
             setLoadingChat(false);
             onClose();
         } catch (error) {
@@ -115,22 +118,13 @@ const LeftSideBox = () => {
             setChats(data);
             // console.log(data);
         } catch (error) {
-            toast({
-                title: "Error Occured!",
-                description: "Failed to Load the chats",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom-left",
-            });
+           
         }
     };
 
     useEffect(() => {
-     
         fetchChats();
-        // eslint-disable-next-line
-    }, []);
+    });
 
     return (
 
@@ -244,10 +238,12 @@ const LeftSideBox = () => {
                     >
                         {chats.map((chat) => (
                             <Box
-                                onClick={() => setSelectedChat(chat)}
+                                onClick={() => {console.log("chat")
+                                console.log(chat);
+                                     setSelectedChat(chat)}}
                                 cursor="pointer"
-                                bg={selectedChat === chat ? "#38B2AC" : "#2e2c42"}
-                                color={selectedChat === chat ? "white" : "black"}
+                                bg={selectedChat._id === chat._id ? "#38B2AC" : "#2e2c42"}
+                                color={selectedChat._id === chat._id ? "white" : "black"}
                                 px={3}
                                 py={4}
                                 borderRadius="lg"
