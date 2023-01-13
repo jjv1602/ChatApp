@@ -39,11 +39,11 @@ const sendMessage = asyncHandler(async (req, res) => {
     var message;
     if(isImg){
      message = await Message.create({ sender: req.user._id,isImg:true,ImgContent:ImgContent,ImgOCRContent:ImgOCRContent, content:content, chat: chatId });
-     console.log(message);
+    //  console.log(message);
     }
     else{
       message = await Message.create({ sender: req.user._id,isImg:false,ImgOCRContent:"",ImgContent:"", content:content, chat: chatId });
-      console.log(message);
+      // console.log(message);
     }
     message = await (
       await message.populate("sender", "name pic")

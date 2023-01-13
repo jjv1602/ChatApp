@@ -13,9 +13,27 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const {
     
-    user,setUser
+    user,setUser,setChats
    
 } = ChatState();
+
+const fetchChats = async () => {
+  // console.log(user._id);
+  try {
+      const config = {
+          headers: {
+              Authorization: `Bearer ${user.token}`,
+          },
+      };
+
+      const { data } = await axios.get("/api/chat", config);
+      console.log("loginpg");
+      setChats(data);
+      // console.log(data);
+  } catch (error) {
+     
+  }
+};
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
@@ -47,10 +65,11 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
-
+      
       localStorage.setItem("userInfo", JSON.stringify(data));
+      await fetchChats();
+      console.log("fetchCHat");
       setUser(JSON.stringify(data));
-  
       navigate("/chat");
     } catch (error) {
       toast({

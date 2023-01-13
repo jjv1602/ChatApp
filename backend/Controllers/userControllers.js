@@ -114,7 +114,7 @@ const allUsers = asyncHandler(async (req, res) => {
 
   // except the current user that is sign in display other users so $ne
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  console.log(users);
+  // console.log(users);
   res.send(users);
 });
 const modify_block_word_list=asyncHandler(async(req,res)=>{
@@ -125,7 +125,7 @@ const modify_block_word_list=asyncHandler(async(req,res)=>{
       user.blockWords=blockWords||user.blockWords;
       user.blockSwitch=blockSwitch||user.blockSwitch;
       const updatedUser = await user.save();
-      console.log(updatedUser);
+      // console.log(updatedUser);
       res.json({
         _id: user._id,
         name: user.name,

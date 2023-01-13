@@ -1,5 +1,5 @@
 import React from 'react'
-import { AddIcon, BellIcon } from "@chakra-ui/icons";
+import { AddIcon, AttachmentIcon, BellIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
@@ -33,7 +33,7 @@ const LeftSideBox = () => {
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
 
-    const { notification } = ChatState();
+    const { notification,setNotification } = ChatState();
     const handleSearch = async () => {
 
         if (!search) {
@@ -238,12 +238,14 @@ const LeftSideBox = () => {
                     >
                         {chats.map((chat) => (
                             <Box
-                                onClick={() => {console.log("chat")
-                                console.log(chat);
-                                     setSelectedChat(chat)}}
+                                onClick={() => {
+                                    console.log(chat);
+                                    console.log(notification);
+                                setNotification(notification.filter((n) => n.chat._id !== chat._id));
+                                setSelectedChat(chat)
+                            }}
                                 cursor="pointer"
-                                bg={selectedChat._id === chat._id ? "#38B2AC" : "#2e2c42"}
-                                color={selectedChat._id === chat._id ? "white" : "black"}
+                                bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#2e2c42"}
                                 px={3}
                                 py={4}
                                 borderRadius="lg"
@@ -262,24 +264,29 @@ const LeftSideBox = () => {
                                     {chat.latestMessage && (
                                         <Text fontSize='md' color='#ffffff'>
                                             <b>{chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : </b>
-                                            {chat.latestMessage.content.length > 50
-                                                ? chat.latestMessage.content.substring(0, 51) + "..."
+                                            {chat.latestMessage.content.length > 50 && !chat.latestMessage.isImg
+                                                ? chat.latestMessage.content.substring(0, 40) + "..."
                                                 : chat.latestMessage.content}
+                                            {chat.latestMessage.isImg && <><b>Image <AttachmentIcon/></b></>}
                                         </Text>
                                     )}
 
                                 </Box>
                                
-                                {(notification.map((not) => (
+                                {chat.latestMessage && notification.map((not) => (
                                     <>
-                                    {not.sender.name.includes(chat.latestMessage.sender.name)
-                                             &&
-                                            <Button colorScheme='green' borderRadius="20" ml={"65%"} ><BellIcon/></Button>
+                                    { not.sender.name.toLowerCase().includes(chat.latestMessage.sender.name.toLowerCase())
+                                        && 
+                                        <>
+                                            {/* {console.log("not")}
+                                            {console.log(not)} */}
+                                            <Button colorScheme='green' ml={"50%"}
+                                     ><BellIcon/></Button>
+                                     </>
                                     }
                                     </>
-
                                 )
-                                ))
+                                )
                                 }
                             </Box>
 
