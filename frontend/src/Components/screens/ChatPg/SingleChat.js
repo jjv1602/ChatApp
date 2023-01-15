@@ -2,8 +2,8 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 // import "./styles.css";
-import { Button, IconButton, Spinner, useToast } from "@chakra-ui/react";
-import { getSender, getSenderFull } from "../../../config/ChatLogics";
+import { Avatar, Button, IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { checkingBlockContent, getSender, getSenderFull } from "../../../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon, ArrowRightIcon, LinkIcon } from "@chakra-ui/icons";
@@ -43,11 +43,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return text;
 
   };
-  
+
   const closePreview = () => {
     setpreviewImg(false);
   }
-  
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -95,7 +95,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const sendMessage = async (event) => {
     if (newMessage || previewImg) {
       socket.emit("stop typing", selectedChat._id);
-      if(previewImg && pic){
+      if (previewImg && pic) {
         try {
           const config = {
             headers: {
@@ -103,21 +103,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               Authorization: `Bearer ${user.token}`,
             },
           };
-          const ocr=await doOCR(pic);
-          
+          const ocr = await doOCR(pic);
+
           setNewMessage("");
           const { data } = await axios.post(
             "/api/message",
             {
-              isImg:true,
-              ImgContent:pic,
-              ImgOCRContent:ocr,
-              content:newMessage ? newMessage:"",
+              isImg: true,
+              ImgContent: pic,
+              ImgOCRContent: ocr,
+              content: newMessage ? newMessage : "",
               chatId: selectedChat,
             },
             config
           );
-          
+
           socket.emit("new message", data);
           setpreviewImg(false);
           setMessages([...messages, data]);
@@ -132,8 +132,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           });
         }
       }
-      else{
-        
+      else {
+
         try {
           const config = {
             headers: {
@@ -145,8 +145,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           const { data } = await axios.post(
             "/api/message",
             {
-              isImg:false,
-              ImgContent:"",
+              isImg: false,
+              ImgContent: "",
               content: newMessage,
               chatId: selectedChat,
             },
@@ -173,18 +173,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       data.append("file", pics);
       data.append("upload_preset", "eventmanage");
       data.append("cloud_name", "dxxu4powb");
-    
+
       fetch("https://api.cloudinary.com/v1_1/dxxu4powb/image/upload", {
         method: "post",
         body: data,
       })
         .then((res) => res.json())
         .then((data) => {
-         
+
           setpreviewImg(true);
-          
+
           setPic(data.url.toString());
-          
+
         })
         .catch((err) => {
           // console.log(err);
@@ -220,8 +220,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         // if notification does not includes already received msg
         if (!notification.includes(newMessageRecieved)) {
           // give notification
-          setNotification([newMessageRecieved, ...notification]);
-          setFetchAgain(!fetchAgain);
+          if (newMessageRecieved.isImg && !checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, newMessageRecieved.ImgOCRContent)) {
+
+            setNotification([newMessageRecieved, ...notification]);
+            setFetchAgain(!fetchAgain);
+          }
+          if(!newMessageRecieved.isImg){
+            setNotification([newMessageRecieved, ...notification]);
+            setFetchAgain(!fetchAgain);
+          }
+
         }
       } else {
         setMessages([...messages, newMessageRecieved]);
@@ -256,38 +264,67 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       {selectedChat ? (
         <>
           <Text
-            fontSize={{ base: "28px", md: "30px" }}
+            fontSize={{ base: "15px", md: "24px" }}
             pb={3}
-            px={2}
+            px={10}
             w="100%"
             fontFamily={"'Fredoka', sans-serif "}
             display="flex"
-            justifyContent={{ base: "space-between", md: "space-between" }}
+            justifyContent={selectedChat.isGroupChat ? "space-between" : ""}
             alignItems="center"
-            backgroundColor='#A4A9B6'
-            color='#000000'
+            color='#ffffff'
             bg="#38B2AC"
+            borderBottomRightRadius="20"
+            borderBottomLeftRadius="20"
           >
-            <IconButton
-              d={{ base: "flex", md: "none" }}
-              icon={<ArrowBackIcon />}
-              onClick={() => setSelectedChat("")}
-            />
+
 
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
-                  
-                  {selectedChat.users[0].name.toUpperCase()}
-                  <ProfileModal
-                    user={getSenderFull(user, selectedChat.users)}
+                  <IconButton
+
+                    icon={<ArrowBackIcon />}
+                    colorScheme='green'
+                    onClick={() => setSelectedChat("")}
+                    mr={4}
+
+
                   />
+                  <Avatar
+                    size="sm"
+                    mr={10}
+                    cursor="pointer"
+                    src={getSenderFull(user, selectedChat.users).pic}
+                  />
+                  <>
+                    {selectedChat.users[0].name.toUpperCase() === user.name.toUpperCase() ?
+                      <>
+                        {selectedChat.users[1].name}
+                      </> :
+                      <>
+                        {selectedChat.users[0].name}
+                      </>
+                    }
+
+                  </>
+
+                  {/* <ProfileModal
+                    user={getSenderFull(user, selectedChat.users)}
+                  /> */}
 
                 </>
               ) : (
                 <>
-                  {selectedChat.chatName.toUpperCase()}
+                  <IconButton
+                    display={{ base: "flex", md: "flex" }}
+                    icon={<ArrowBackIcon />}
+                    colorScheme='green'
+                    onClick={() => setSelectedChat("")}
+                  />
+                  {selectedChat.chatName.toLowerCase()}
                   <UpdateGroupChatModal
+                  // color='#ffffff'
                     fetchMessages={fetchMessages}
                     fetchAgain={fetchAgain}
                     setFetchAgain={setFetchAgain}
@@ -304,7 +341,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h="90%"
             borderRadius="lg"
             overflowY="hidden"
-          
+
           >
             {loading ? (
               <Spinner
@@ -317,17 +354,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             ) : (
               <>
                 {previewImg ?
-                (  
-              
-                  <PreviewImgScreen pic={pic} previewImg={previewImg} closePreview={closePreview}/>
-                
-                ) :
+                  (
+
+                    <PreviewImgScreen pic={pic} previewImg={previewImg} closePreview={closePreview} />
+
+                  ) :
                   (
                     <Box
-                    
+
                       display="flex"
                       flexDirection="column"
-                      overflowY="scroll"
+                      overflowY="auto"
                       scrollbarWidth="none"
                       padding="10"
                       css={{
@@ -341,7 +378,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         },
                         '&::-webkit-scrollbar-thumb': {
                           height: "1px",
-                          background: "#b9bbf3",
+                          background: "#38B2AC",
+                          borderRadius: "40px"
                         },
                       }}
                     >
@@ -351,7 +389,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 }
 
               </>
-              )
+            )
             }
             {istyping ? (
               <div>
@@ -365,34 +403,41 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             ) : (
               <></>
             )}
-            <Box display="flex" alignContent="center" justifyContent="center">
+            <Box display="flex" alignContent="center" justifyContent="center" h={"6vh"} >
               <FormControl
                 id="image"
-                w={"5%"}
+                w={"4%"}
               >
                 <label htmlFor="fileInput">
-                  <LinkIcon bgColor='#C8E1C1' w={"100%"} h={"70%"} p={2} borderRadius="4" cursor="pointer" visibility={previewImg ? "hidden":"visible"}/>
+                  <LinkIcon bgColor='#C8E1C1' w={"100%"} h={"100%"} p={2} borderRadius="5" cursor="pointer" visibility={previewImg ? "hidden" : "visible"} />
                 </label>
                 <input
                   type='file'
                   id="fileInput"
                   style={{ display: 'none' }}
                   onChange={(e) => postPic(e.target.files[0])}
-                  
+
                 />
 
               </FormControl>
-              <FormControl>
+              <FormControl
+                w={"96%"}
+                h={"100%"}
+
+              >
                 <Input
                   placeholder=" Enter a message..  "
                   value={newMessage}
-                  w={"90%"}
+                  w={"95%"}
+                  h={"100%"}
                   onChange={typingHandler}
                   bgColor="#ffffff"
                 />
 
-                <Button bgColor='#C8E1C1' w={"5%"} p={2} onClick={sendMessage} >
+                <Button h={"100%"} w={"5%"} p={0} mt={0} borderRadius="5" backgroundColor={"#ffffff"} onClick={sendMessage} >
                   <IconButton
+                    w={"100%"}
+                    h={"100%"}
                     bgColor='#C8E1C1'
                     icon={<ArrowRightIcon />}
                   />

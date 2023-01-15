@@ -4,7 +4,7 @@ import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getSender } from "../../../../config/ChatLogics";
+import { checkingBlockContent, getSender } from "../../../../config/ChatLogics";
 import { Button, Input, useDisclosure } from "@chakra-ui/react";
 import { ChatState } from "../../../Context/ChatProvider";
 import GrpChatModal from "../../GrpChatModal/GrpChatModal";
@@ -32,8 +32,8 @@ const LeftSideBox = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
-
-    const { notification,setNotification } = ChatState();
+    const [lastUnblockedMsg,setLastUnblockedMsg]=useState();
+    const { notification, setNotification } = ChatState();
     const handleSearch = async () => {
 
         if (!search) {
@@ -118,7 +118,7 @@ const LeftSideBox = () => {
             setChats(data);
             // console.log(data);
         } catch (error) {
-           
+
         }
     };
 
@@ -220,19 +220,21 @@ const LeftSideBox = () => {
                 <Text fontSize='lg' fontWeight="bold" color='#ffffff' >Your Messages</Text>
                 <br></br>
                 {chats ? (
-                    <Stack overflowY="scroll"
+                    <Stack overflowY="auto" padding={2}
                         css={{
                             '&::-webkit-scrollbar': {
-                                width: '9px',
+                                width: '6px',
+
 
                             },
                             '&::-webkit-scrollbar-track': {
-                                background: "ffffff",
+                                background: "#000000",
 
                             },
                             '&::-webkit-scrollbar-thumb': {
                                 height: "1px",
-                                background: "#000000",
+                                background: "#ffffff",
+                                borderRadius: "40px"
                             },
                         }}
                     >
@@ -241,9 +243,9 @@ const LeftSideBox = () => {
                                 onClick={() => {
                                     console.log(chat);
                                     console.log(notification);
-                                setNotification(notification.filter((n) => n.chat._id !== chat._id));
-                                setSelectedChat(chat)
-                            }}
+                                    setNotification(notification.filter((n) => n.chat._id !== chat._id));
+                                    setSelectedChat(chat)
+                                }}
                                 cursor="pointer"
                                 bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#2e2c42"}
                                 px={3}
@@ -261,29 +263,55 @@ const LeftSideBox = () => {
                                             : chat.chatName}
                                     </Text>
 
-                                    {chat.latestMessage && (
+                                    {chat.latestMessage && !chat.latestMessage.isImg && (
+                                        <>
+                                        {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
                                         <Text fontSize='md' color='#ffffff'>
                                             <b>{chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : </b>
                                             {chat.latestMessage.content.length > 50 && !chat.latestMessage.isImg
                                                 ? chat.latestMessage.content.substring(0, 40) + "..."
-                                                : chat.latestMessage.content}
-                                            {chat.latestMessage.isImg && <><b>Image <AttachmentIcon/></b></>}
+                                                : chat.latestMessage.content
+                                            }
+
                                         </Text>
+                                        </>
                                     )}
+                                    {chat.latestMessage && chat.latestMessage.isImg && !checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
+                                        <>
+                                        {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
+                                         <Text fontSize='md' color='#ffffff'>
+                                        <b>
+                                        {chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : 
+                                        </b>
+                                            <b>Image <AttachmentIcon /></b>
+                                        </Text>    
+                                        </>
+                                    }
+                                    {chat.latestMessage && lastUnblockedMsg && chat.latestMessage.isImg && checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
+                                        (
+                                            <Text fontSize='md' color='#ffffff'>
+                                                <b>{lastUnblockedMsg.sender.name === user.name ? "You" : lastUnblockedMsg.sender.name} : </b>
+                                                {lastUnblockedMsg.content.length > 50 && !lastUnblockedMsg.isImg
+                                                    ? lastUnblockedMsg.content.substring(0, 40) + "..."
+                                                    : lastUnblockedMsg.content}
+                                                {lastUnblockedMsg.isImg && <><b>Image <AttachmentIcon/></b></>}
+                                            </Text>
+                                        )
+                                    }
 
                                 </Box>
-                               
+
                                 {chat.latestMessage && notification.map((not) => (
                                     <>
-                                    { not.sender.name.toLowerCase().includes(chat.latestMessage.sender.name.toLowerCase())
-                                        && 
-                                        <>
-                                            {/* {console.log("not")}
+                                        {not.sender.name.toLowerCase().includes(chat.latestMessage.sender.name.toLowerCase())
+                                            &&
+                                            <>
+                                                {/* {console.log("not")}
                                             {console.log(not)} */}
-                                            <Button colorScheme='green' ml={"50%"}
-                                     ><BellIcon/></Button>
-                                     </>
-                                    }
+                                                <Button colorScheme='green' ml={"50%"}
+                                                ><BellIcon /></Button>
+                                            </>
+                                        }
                                     </>
                                 )
                                 )

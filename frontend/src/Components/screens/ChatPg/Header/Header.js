@@ -10,7 +10,6 @@ import ProfileModal from '../ProfileModal/ProfileModal';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
-
 import ChatLoading from '../../../Loading/ChatLoading';
 import { ChatState } from '../../../Context/ChatProvider';
 import SearchListItem from '../SearchListItem/SearchListItem';
@@ -27,7 +26,7 @@ const Header = () => {
     const toast = useToast();
     const btnRef = React.useRef();//for drawer
     const [new_block_word, setNew_block_word] = useState("");
-    const [blockWords, setblockWords] = useState(["good morning", "happy"]);
+    const [blockWords, setblockWords] = useState(JSON.parse(localStorage.getItem('userInfo')).blockWords);
     const[blockSwitch,setBlockSwitch]=useState(false);
     // const userInfo=JSON.parse(localStorage.getItem('userInfo')).name;
     const userInfo=JSON.parse(localStorage.getItem('userInfo'));
@@ -62,7 +61,9 @@ const Header = () => {
     const removeItemfromblock = (txt) => {
         
         delete blockWords[blockWords.findIndex((el) => el === txt)];
-        // console.log(blockWords);
+        setblockWords(blockWords.filter(n=>n));
+        console.log("blockWords");
+        console.log(blockWords.filter(n=>n));
     }
 
     const updateBlockList=async(email,blockWords,blockSwitch)=>{
@@ -76,7 +77,13 @@ const Header = () => {
                 };
                 const { data } = await axios.put(`/api/users/modify_block_words_list`, { email,blockWords,blockSwitch }, config);
                 localStorage.setItem("userInfo", JSON.stringify(data));    
-               
+                toast({
+                    title: "Block List Saved",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom",
+                  });
             } catch (error) {
                 toast({
                     title: "Error Updating block list",
@@ -98,11 +105,12 @@ const Header = () => {
             p="2px 10px 5px 10px"
             display="flex"
             alignItems="center"
+            justifyContent='space-between'
         >
 
-            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "80%", width: "5%", borderRadius: "50%" }}></Image>
+            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "90%", width: "8%", borderRadius: "50%" }}></Image>
 
-            <Text pl="23vw" fontSize="5xl" className={style.app_name}>
+            <Text fontSize="4xl" className={style.app_name}>
                 Splice Chat
             </Text>
             <div className={style.menu}>
@@ -137,14 +145,14 @@ const Header = () => {
                     </MenuButton>
                     <MenuList p={2} bg={"#dce5f8"}>
                         <ProfileModal user={user}>
-                            <MenuItem fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "} >My Profile</MenuItem>{" "}
+                            <MenuItem fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "} fontWeight="normal">My Profile</MenuItem>{" "}
                         </ProfileModal>
                         <MenuItem >
                             <FormControl display='flex' alignItems='center' >
                                 <FormLabel htmlFor='email-alerts' mb='0' fontSize="1.4rem" fontFamily={"'Fredoka', sans-serif "}>
                                     Block Images with text
                                 </FormLabel>
-                                <Switch id='block_good_morning' onChange={(e) => setBlockGoodMorning(e.target.value)} /></FormControl>
+                                </FormControl>
                             <Button onClick={add_block_word}>Add Word</Button>
                             <br></br>
                         </MenuItem>
