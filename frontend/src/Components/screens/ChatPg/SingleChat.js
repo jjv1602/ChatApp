@@ -2,7 +2,7 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 // import "./styles.css";
-import { Avatar, Button, IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { Avatar, Button, IconButton, Spinner, useMediaQuery, useToast } from "@chakra-ui/react";
 import { checkingBlockContent, getSender, getSenderFull } from "../../../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -32,6 +32,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [picMessage, setPicMessage] = useState();
   const [previewImg, setpreviewImg] = useState(false);
   const toast = useToast();
+
   const worker = createWorker({
     logger: m => <></>
   });
@@ -225,7 +226,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             setNotification([newMessageRecieved, ...notification]);
             setFetchAgain(!fetchAgain);
           }
-          if(!newMessageRecieved.isImg){
+          if (!newMessageRecieved.isImg) {
             setNotification([newMessageRecieved, ...notification]);
             setFetchAgain(!fetchAgain);
           }
@@ -272,8 +273,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             display="flex"
             justifyContent={selectedChat.isGroupChat ? "space-between" : ""}
             alignItems="center"
-            color='#ffffff'
-            bg="#38B2AC"
+            color='#000000'
+            bg="#8edcd8"
             borderBottomRightRadius="20"
             borderBottomLeftRadius="20"
           >
@@ -285,15 +286,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   <IconButton
 
                     icon={<ArrowBackIcon />}
-                    colorScheme='green'
+                    color='#dc8e92'
                     onClick={() => setSelectedChat("")}
                     mr={4}
-
+                    mt={1}
 
                   />
                   <Avatar
-                    size="sm"
+                    size="md"
                     mr={10}
+                    mt={1}
                     cursor="pointer"
                     src={getSenderFull(user, selectedChat.users).pic}
                   />
@@ -317,17 +319,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <>
                   <IconButton
-                    display={{ base: "flex", md: "flex" }}
+
                     icon={<ArrowBackIcon />}
-                    colorScheme='green'
+                    color='#dc8e92'
                     onClick={() => setSelectedChat("")}
+                    mr={4}
+                    mt={1}
+
                   />
                   {selectedChat.chatName.toLowerCase()}
                   <UpdateGroupChatModal
-                  // color='#ffffff'
+                    // color='#ffffff'
                     fetchMessages={fetchMessages}
                     fetchAgain={fetchAgain}
                     setFetchAgain={setFetchAgain}
+                    mt={1}
                   />
                 </>
               ))}
@@ -403,10 +409,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             ) : (
               <></>
             )}
-            <Box display="flex" alignContent="center" justifyContent="center" h={"6vh"} >
+            <Box display="flex" alignContent="center" justifyContent="center" h={"5vh"} >
               <FormControl
                 id="image"
-                w={"4%"}
+                w={"5%"}
               >
                 <label htmlFor="fileInput">
                   <LinkIcon bgColor='#C8E1C1' w={"100%"} h={"100%"} p={2} borderRadius="5" cursor="pointer" visibility={previewImg ? "hidden" : "visible"} />
@@ -428,7 +434,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <Input
                   placeholder=" Enter a message..  "
                   value={newMessage}
-                  w={"95%"}
+                  w={"90%"}
                   h={"100%"}
                   onChange={typingHandler}
                   bgColor="#ffffff"

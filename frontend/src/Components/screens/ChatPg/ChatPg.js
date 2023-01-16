@@ -10,6 +10,7 @@ import { ChatState } from '../../Context/ChatProvider';
 const ChatPg = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
   const {user}=ChatState();
+  
   return (
     <div className={style.main}>
       <Header></Header>

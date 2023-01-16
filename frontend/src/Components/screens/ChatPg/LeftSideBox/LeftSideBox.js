@@ -1,11 +1,11 @@
 import React from 'react'
-import { AddIcon, AttachmentIcon, BellIcon } from "@chakra-ui/icons";
+import { AddIcon, AttachmentIcon, BellIcon, Icon, SearchIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { checkingBlockContent, getSender } from "../../../../config/ChatLogics";
-import { Button, Input, useDisclosure } from "@chakra-ui/react";
+import { Button, Input, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { ChatState } from "../../../Context/ChatProvider";
 import GrpChatModal from "../../GrpChatModal/GrpChatModal";
 import ChatLoading from '../../../Loading/ChatLoading';
@@ -32,8 +32,9 @@ const LeftSideBox = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
-    const [lastUnblockedMsg,setLastUnblockedMsg]=useState();
+    const [lastUnblockedMsg, setLastUnblockedMsg] = useState();
     const { notification, setNotification } = ChatState();
+    const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)')
     const handleSearch = async () => {
 
         if (!search) {
@@ -129,13 +130,13 @@ const LeftSideBox = () => {
     return (
 
         <Box
-            display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+            display={isLargerThan1000 ? 'flex' : (selectedChat ? "none" : "flex" )}
             flexDir="column"
             alignItems="center"
             justifyContent="space-between"
             p={1}
             bg="#181C34"
-            w={{ base: "100%", sm: "100%", md: "40%" }}
+            w={isLargerThan1000 ? "40%":  "100%" }
             borderRadius="lg"
             borderWidth="1px"
 
@@ -152,10 +153,11 @@ const LeftSideBox = () => {
                 alignItems="center"
 
             >
-                <Button w={450} variant="ghost" bg={"#dce5f8"} onClick={onOpen} >
-                    <Text fontSize="lg" pl={"2px"} ml={"2px"} fontFamily={"'Fredoka', sans-serif "}>
-                        Search <i className="fas fa-search" p={4}></i>
+                <Button variant="ghost"    w="85%" ml={4} bg={"#dce5f8"} onClick={onOpen} >
+                    <Text fontSize="lg" pl={"2px"}  fontFamily={"'Fredoka', sans-serif "}>
+                        Search
                     </Text>
+                    <Icon as={SearchIcon} ml={"80%"} />
                 </Button>
 
 
@@ -265,40 +267,38 @@ const LeftSideBox = () => {
 
                                     {chat.latestMessage && !chat.latestMessage.isImg && (
                                         <>
-                                        {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
-                                        <Text fontSize='md' color='#ffffff'>
-                                            <b>{chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : </b>
-                                            {chat.latestMessage.content.length > 50 && !chat.latestMessage.isImg
-                                                ? chat.latestMessage.content.substring(0, 40) + "..."
-                                                : chat.latestMessage.content
-                                            }
+                                            {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
+                                            <Text fontSize='md' color='#ffffff'>
+                                                <b>{chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : </b>
+                                                {chat.latestMessage.content.length > 50 && !chat.latestMessage.isImg
+                                                    ? chat.latestMessage.content.substring(0, 40) + "..."
+                                                    : chat.latestMessage.content
+                                                }
 
-                                        </Text>
+                                            </Text>
                                         </>
                                     )}
                                     {chat.latestMessage && chat.latestMessage.isImg && !checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
                                         <>
-                                        {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
-                                         <Text fontSize='md' color='#ffffff'>
-                                        <b>
-                                        {chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} : 
-                                        </b>
-                                            <b>Image <AttachmentIcon /></b>
-                                        </Text>    
+                                            {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
+                                            <Text fontSize='md' color='#ffffff'>
+                                                <b>
+                                                    {chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} :
+                                                </b>
+                                                <b>Image <AttachmentIcon /></b>
+                                            </Text>
                                         </>
                                     }
-                                    {chat.latestMessage && lastUnblockedMsg && chat.latestMessage.isImg && checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
+                                    {chat.latestMessage && chat.latestMessage.isImg && checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
                                         (
                                             <Text fontSize='md' color='#ffffff'>
-                                                <b>{lastUnblockedMsg.sender.name === user.name ? "You" : lastUnblockedMsg.sender.name} : </b>
-                                                {lastUnblockedMsg.content.length > 50 && !lastUnblockedMsg.isImg
-                                                    ? lastUnblockedMsg.content.substring(0, 40) + "..."
-                                                    : lastUnblockedMsg.content}
-                                                {lastUnblockedMsg.isImg && <><b>Image <AttachmentIcon/></b></>}
+                                                <b>
+                                                    {chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} :
+                                                </b>
+                                                <b>{chat.latestMessage.sender.name === user.name ? <> <b>Image <AttachmentIcon /></b> </>: <i>"This message was blocked"</i> }</b>
                                             </Text>
                                         )
                                     }
-
                                 </Box>
 
                                 {chat.latestMessage && notification.map((not) => (

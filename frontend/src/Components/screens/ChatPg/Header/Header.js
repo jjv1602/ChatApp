@@ -1,5 +1,5 @@
 import {
-    Box, Button, Tooltip, Text, Menu, MenuButton, MenuList, MenuItem, Image, Avatar, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, GridItem, Grid, Badge
+    Box, Button, Tooltip, Text, Menu, MenuButton, MenuList, MenuItem, Image, Avatar, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, GridItem, Grid, Badge, useMediaQuery
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import NotificationBadge from "react-notification-badge";  //installed using npm install --save react-notification-badge
@@ -28,6 +28,7 @@ const Header = () => {
     const [new_block_word, setNew_block_word] = useState("");
     const [blockWords, setblockWords] = useState(JSON.parse(localStorage.getItem('userInfo')).blockWords);
     const[blockSwitch,setBlockSwitch]=useState(false);
+    const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)')
     // const userInfo=JSON.parse(localStorage.getItem('userInfo')).name;
     const userInfo=JSON.parse(localStorage.getItem('userInfo'));
     const [email, setEmail] = useState(userInfo.email);
@@ -108,7 +109,9 @@ const Header = () => {
             justifyContent='space-between'
         >
 
-            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} style={{ height: "90%", width: "8%", borderRadius: "50%" }}></Image>
+            <Image alt="logo" src={require("../../Assets_Img/website_logo_chat_pg.jpg")} 
+            width={isLargerThan1000 ? "8%":"15%"}
+            style={{ height: "90%", borderRadius: "50%" }}></Image>
 
             <Text fontSize="4xl" className={style.app_name}>
                 Splice Chat

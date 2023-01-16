@@ -72,7 +72,7 @@ const ScrollableChat = ({ messages }) => {
                     }}
 
                   >
-                    <Heading size="sm">{m.sender.name} qrqwrqoj</Heading>
+                    <Heading size="sm">{m.sender.name} </Heading>
                     {m.isImg ? <Image
                       boxSize='150px'
                       objectFit='cover'
