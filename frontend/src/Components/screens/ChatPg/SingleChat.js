@@ -41,6 +41,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
     const { data: { text } } = await worker.recognize(pic);
+    console.log("text");
+    console.log(text);
     return text;
 
   };
@@ -98,14 +100,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       socket.emit("stop typing", selectedChat._id);
       if (previewImg && pic) {
         try {
+          console.log("1");
           const config = {
             headers: {
               "Content-type": "application/json",
               Authorization: `Bearer ${user.token}`,
             },
           };
+          console.log("2");
           const ocr = await doOCR(pic);
-
+          console.log("3");
           setNewMessage("");
           const { data } = await axios.post(
             "/api/message",
@@ -123,6 +127,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           setpreviewImg(false);
           setMessages([...messages, data]);
         } catch (error) {
+          console.log(error);
           toast({
             title: "Error Occured!",
             description: "Failed to send the Message",
@@ -227,6 +232,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             setFetchAgain(!fetchAgain);
           }
           if (!newMessageRecieved.isImg) {
+            console.log(newMessageRecieved);
             setNotification([newMessageRecieved, ...notification]);
             setFetchAgain(!fetchAgain);
           }
@@ -300,7 +306,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     src={getSenderFull(user, selectedChat.users).pic}
                   />
                   <>
-                    {selectedChat.users[0].name.toUpperCase() === user.name.toUpperCase() ?
+                    {selectedChat && selectedChat.users[0].name.toUpperCase() === user.name.toUpperCase() ?
                       <>
                         {selectedChat.users[1].name}
                       </> :
@@ -327,7 +333,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     mt={1}
 
                   />
-                  {selectedChat.chatName.toLowerCase()}
+                  {selectedChat.chatName}
                   <UpdateGroupChatModal
                     // color='#ffffff'
                     fetchMessages={fetchMessages}

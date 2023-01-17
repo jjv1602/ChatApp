@@ -257,7 +257,7 @@ const LeftSideBox = () => {
                                 display="flex"
                             >
 
-                                <Avatar id="av" size='lg' src={chat.users[1].pic} />
+                                <Avatar id="av" size='lg' src={ chat.users[0]._id === user._id ? chat.users[1].pic : chat.users[0].pic} />
                                 <Box display="flex" flexDirection="column" pl="4">
                                     <Text id="person" fontSize='2xl' color='#ffffff' fontWeight="bold">
                                         {!chat.isGroupChat
@@ -278,7 +278,7 @@ const LeftSideBox = () => {
                                             </Text>
                                         </>
                                     )}
-                                    {chat.latestMessage && chat.latestMessage.isImg && !checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
+                                    {chat.latestMessage && chat.latestMessage.isImg && JSON.parse(localStorage.getItem("userInfo")).blockWords && !checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
                                         <>
                                             {/* {chat.latestMessage!== lastUnblockedMsg && <>{setLastUnblockedMsg(chat.latestMessage)}</>} */}
                                             <Text fontSize='md' color='#ffffff'>
@@ -289,9 +289,9 @@ const LeftSideBox = () => {
                                             </Text>
                                         </>
                                     }
-                                    {chat.latestMessage && chat.latestMessage.isImg && checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
+                                    {chat.latestMessage && chat.latestMessage.isImg && JSON.parse(localStorage.getItem("userInfo")).blockWords &&  checkingBlockContent(JSON.parse(localStorage.getItem("userInfo")).blockWords, chat.latestMessage.ImgOCRContent) &&
                                         (
-                                            <Text fontSize='md' color='#ffffff'>
+                                            <Text fontSize='md' color='#ffffff' >
                                                 <b>
                                                     {chat.latestMessage.sender.name === user.name ? "You" : chat.latestMessage.sender.name} :
                                                 </b>
@@ -306,9 +306,7 @@ const LeftSideBox = () => {
                                         {not.sender.name.toLowerCase().includes(chat.latestMessage.sender.name.toLowerCase())
                                             &&
                                             <>
-                                                {/* {console.log("not")}
-                                            {console.log(not)} */}
-                                                <Button colorScheme='green' ml={"50%"}
+                                                <Button colorScheme='green' ml={"20%"} display="flex"
                                                 ><BellIcon /></Button>
                                             </>
                                         }

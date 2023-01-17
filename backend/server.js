@@ -23,7 +23,7 @@ const server=app.listen(PORT,console.log(`Server started on port ${PORT} `));
 
 // ============== SOCKET IO =============
 const io = require("socket.io")(server, {
-    pingTimeout: 30000,     // is user is offline for more than 60 seconds then it would close 
+    pingTimeout: 60000,     // is user is offline for more than 60 seconds then it would close 
     cors: {
       origin: "http://localhost:3000",
       // credentials: true,

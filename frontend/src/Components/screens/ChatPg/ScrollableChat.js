@@ -55,7 +55,7 @@ const ScrollableChat = ({ messages }) => {
 
                 </>
               }
-              {isfirst_msg_of_Sender(messages, m, i, user._id) && m.isImg && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
+              {isfirst_msg_of_Sender(messages, m, i, user._id) && m.isImg && blockWords && !checkingBlockContent(blockWords, m.ImgOCRContent) &&
                 <>
                   <Avatar id="av" size='lg' src={m.sender.pic ? m.sender.pic :"https://bit.ly/dan-abramov"} />
                   <Box  className= "sender_msg"
@@ -87,7 +87,7 @@ const ScrollableChat = ({ messages }) => {
 
               {!isfirst_msg_of_Sender(messages, m, i, user._id) &&
               <>
-                {(m.isImg && (!checkingBlockContent(blockWords, m.ImgOCRContent) || m.sender.name === user.name)) &&
+                {(m.isImg && blockWords&& (!checkingBlockContent(blockWords, m.ImgOCRContent) || m.sender.name === user.name)) &&
                 <>
                   <Box className={m.sender._id === user._id ? "You_msg": " "}
                     style={{

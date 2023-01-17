@@ -163,7 +163,7 @@ const Header = () => {
                         <br></br>
                         <Box w='90%' mt={3} p={4} bg='#ffffff'>
 
-                            {blockWords.map((txt) => (
+                            {blockWords && blockWords.map((txt) => (
                                 <Badge colorScheme='red' fontSize='0.8em' p={1} m={1} >{txt} <Button m={1} size="sm" onClick={() => removeItemfromblock(txt)}><Icon as={CloseIcon} boxSize={2} /></Button></Badge>
                             )
                             )}

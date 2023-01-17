@@ -38,8 +38,9 @@ const sendMessage = asyncHandler(async (req, res) => {
   try {
     var message;
     if(isImg){
+
      message = await Message.create({ sender: req.user._id,isImg:true,ImgContent:ImgContent,ImgOCRContent:ImgOCRContent, content:content, chat: chatId });
-    //  console.log(message);
+    //  console.log("erero");
     }
     else{
       message = await Message.create({ sender: req.user._id,isImg:false,ImgOCRContent:"",ImgContent:"", content:content, chat: chatId });
