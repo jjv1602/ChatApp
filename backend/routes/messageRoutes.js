@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.route("/:chatId").get(protect, allMessages);
 router.route("/").post(protect, sendMessage);
-router.route("/deleteallMessages").delete(deleteallMessages);
+router.route("/deleteallmessages").delete(deleteallMessages);
 
 module.exports = router;

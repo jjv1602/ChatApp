@@ -300,8 +300,8 @@ const LeftSideBox = () => {
                                         )
                                     }
                                 </Box>
-
-                                {chat.latestMessage && notification.map((not) => (
+{/* */}
+                                {chat.latestMessage && !chat.isGroupChat && notification.map((not) => (
                                     <>
                                         {not.sender.name.toLowerCase().includes(chat.latestMessage.sender.name.toLowerCase())
                                             &&
