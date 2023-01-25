@@ -68,7 +68,7 @@ Start the server
      <img src="/Images/chat1.jpg"  width="100%" height="500">
     <br><br>
     
- 3- Profile Block Good Morning Messages Block Abusive Content
-     <img src="/Images/profilepg2.jpg"  width="100%" height="500">
+
+     
     <br><br>
 
