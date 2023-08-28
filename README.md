@@ -60,12 +60,17 @@ Start the server
 
 
 ## Screenshots
-
+Complete Demonstration video of website can be found - https://www.youtube.com/watch?v=3xLkyzix5zg
+<br>
+<br>
 1-Home Page
    <img src="/Images/loginsignuppg.jpg"  width="100%" height="500">
    <br><br>
 2- Chat Page
-     <img src="/Images/chat1.jpg"  width="100%" height="500">
+     <img src="/Images/Main.jpg"  width="100%" height="500">
+    <br><br>
+3- Profile Page
+     <img src="/Images/profilepg2.jpg"  width="100%" height="200">
     <br><br>
     
 
